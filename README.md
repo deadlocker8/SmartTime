@@ -1,4 +1,4 @@
-# PlayCount
+# SmartTime
 
 - startdate: 09.01.15
 - current version: 5.0.2 (28) - 04.02.16
