@@ -1,0 +1,251 @@
+[CHANGELOG]
+===========
+
+SMARTTIME
+=========
+
+>>> start-date: 09.01.15
+>>> status-date: 04.02.16
+____________________________________________________
+
+
+v.5.0.2 - (28)
+===============
+
+-Fixed error while saving later added time
+
+>>> end-work: 04.02.16
+
+v.5.0.1 - (27)
+===============
+
+-"add time later"-view
+--> added ComboBoxes for project- and taskname
+-Fixed wrong calculation of time (negative values)
+-got rid of installer (now standalone)
+-savepath of database now OS independent
+
+>>> end-work: 02.02.16
+
+v.5.0.0 - (26)
+===============
+
+-switched from logfile to database
+--> adapted old classes
+--> cleaned and improved code
+--> improved charts
+--> added ComboBox for Task selection in chartview
+--> added ComboBox for Tasks selection in "new Project" Dialog
+--> replaced ListView with TableView
+--> entries in TableView are now editable (Projectname and Taskname)
+--> entries in TableView are now deletable
+--> added export functionality (as SmartTime-Database, as JSON)
+--> added import functionality(from SmartTime up to v4.5.0, from SmartTime-Database, from JSON)
+--> added functionality to completly delete database
+
+>>> end-work: 31.01.16
+
+v.4.5.0 - (25)
+===============
+
+-added menuitem "add time later"
+--> Choose Project, Task, Start- and Enddate and Start- bzw. Endtime 
+
+>>> end-work: 11.11.15
+
+v.4.4.0 - (24)
+===============
+
+-sort projects and tasks in totaltimeview
+
+>>> end-work: 20.10.15
+
+v.4.3.2 - (23)
+===============
+
+-Bugfixes in charts
+--> wrong month order
+
+>>> end-work: 06.10.15
+
+v.4.3.1 - (22)
+===============
+
+-Bugfixes in charts
+--> wrong font-size for dropdowns
+--> chart did not refresh on selection of month
+
+>>> end-work: 02.09.15
+
+v.4.3.0 - (21)
+===============
+
+-added pie chart for total projecttimes
+
+>>> end-work: 31.08.15
+
+v.4.2.1 - (20)
+===============
+
+-Fixed bug in charts
+--> wrong calculation of last day of August
+
+>>> end-work: 31.08.15
+
+v.4.2.0 - (19)
+===============
+
+-formatted logview
+--> added equal spaces
+
+>>> end-work: 12.08.15
+
+v.4.1.1 - (18)
+===============
+
+-varoíous Bugfixes in charts
+(multiple worktimes at one day were not added)
+
+>>> end-work: 12.08.15
+
+v.4.0.1 - (17)
+===============
+
+-added Tooltips for bars in barcharts that show time in hours
+
+>>> end-work: 01.08.15
+
+v.4.0.0 - (16)
+===============
+
+-added charts
+
+>>> end-work: 16.07.15
+
+v.3.4.3 - (15)
+===============
+
+-Programmierbeleg-Version (deleted Menuitems, added comments)
+
+>>> end-work: 28.06.15
+
+v.3.4.2 - (14)
+===============
+
+-Fixed calculation bug (equal tasknames were added even if they are not in the same project)
+
+>>> end-work: 22.06.15
+
+v.3.4.1 - (13)
+===============
+
+-Fixed calculation bug (if time was greater than 24 hours it was divided with modulo 24)
+
+>>> end-work: 25.05.15
+
+v.3.4.0 - (12)
+===============
+
+-added Application-Icon
+-splitted logview and totaltimeview in Accordion
+
+>>> end-work: 10.05.15
+
+v.3.3.0 - (11)
+===============
+
+-Fixed wrong calculated task times
+-added total time calculation for all projects and tasks
+
+>>> end-work: 09.05.15
+
+v.3.2.0 - (10)
+===============
+
+-various Bugfixes
+-added OnCloseRequest (failsafe if closing the app while clock is running)
+-Jeder Projektname in der Projektansicht ist nun ausklappbar (zeigt seine Tasks)
+--> Tasks nun auch zusammengefasst und die Zeiten zusammen addiert
+
+>>> end-work: 08.05.15
+
+v.3.1.0 - (9)
+===============
+
+-added menubar with various functions
+-added realtimeview for elapsed time (new Thread)
+-Fixed Start/Stopp-Button
+
+>>> end-work: 07.05.15
+
+v.3.0.0 - (8)
+===============
+
+-completly new UI with JavaFX
+-re-programming old features in the new design
+
+>>> end-work: 21.04.15
+
+v.2.4.1 - (7)
+===============
+
+-created an installer that creates the configfile on desktop
+--> configfile saves savepath chosen by the user
+
+>>> end-work: 13.05.15
+
+v.2.4.0 - (6)
+===============
+
+-added menuitem "About" (Version, Date, Author, etc.)
+-added Tooltips for Buttons
+-prevented editing of project and taskname while running
+--> added warning dialog
+-centered all dialogs according to main window
+-various bugfixes
+
+>>> end-work: 07.05.15
+
+v.2.3.0 - (5)
+===============
+
+-added realtimeview for elapsed time (new Thread)
+
+>>> end-work: 21.04.15
+
+v.2.2.0 - (4)
+===============
+
+-current project and task now shown as label
+-user can change savepath
+-user can open a different logfile
+-added dropdown for already used projectnames
+
+>>> end-work: 29.03.15
+
+v.2.1.0 - (3)
+===============
+
+-combined Start and Stop Button to a Togglebutton
+-added dialog for creation of project and task
+-added calculation of total time for projects and tasks
+
+>>> end-work: 28.03.15
+
+v.2.0.0 - (2)
+===============
+
+-switched to Java
+
+>>> end-work: 27.03.15
+
+v.1.0.0 - (1)
+===============
+
+-basic implementation in Delphi (Start/Stopp-Button, Reset, Calculation of time difference, formatted output)
+
+>>> end-work: 09.01.15
+
+____________________________________________________
+
+[/CHANGELOG]
