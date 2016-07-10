@@ -5,9 +5,14 @@ SMARTTIME
 =========
 
 >>> start-date: 09.01.15
->>> status-date: 04.02.16
+>>> status-date: 10.07.16
 ____________________________________________________
 
+v.5.0.3 - (29)
+===============
+
+-Fixed issue where user have to press enter button in projectWindow (otherwise dropDown values would have been null)
+>>> end-work: 04.02.16
 
 v.5.0.2 - (28)
 ===============

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="core/CreateMe.java|core/CurrentWork.java|userInterface/CopyOfUserInterfaceController.java|userInterface/Save.java" kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/controlsfx"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/_Tools"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SQLite"/>

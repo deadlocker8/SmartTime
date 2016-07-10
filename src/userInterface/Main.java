@@ -18,7 +18,7 @@ public class Main extends Application
 	public void start(Stage stage)
 	{
 		try
-		{
+		{			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("userInterface.fxml"));
 			Parent root = (Parent)loader.load();
 
