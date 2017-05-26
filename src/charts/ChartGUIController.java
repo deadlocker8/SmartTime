@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+import core.LogObject;
+import core.SQL;
+import core.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import core.LogObject;
-import core.SQL;
-import core.Utils;
+import tools.AlertGenerator;
 
 @SuppressWarnings("rawtypes")
 public class ChartGUIController
@@ -428,14 +428,7 @@ public class ChartGUIController
 	
 	private void showErrorMessage()
 	{
-		Alert alert = new Alert(AlertType.ERROR);	
-		alert.setTitle("Fehler");
-		alert.setHeaderText("");
-		alert.setContentText("Fehler beim Erstellen des Diagramms.");
-		alert.initOwner(stage);
-		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-		dialogStage.getIcons().add(icon);
-		alert.showAndWait();	
+		AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Erstellen des Diagramms.", icon, stage, null, false);	
 	}
 
 	private void showPieChart(PieChart chart)

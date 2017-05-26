@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import core.LogObject;
+import core.SQL;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -27,8 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import core.LogObject;
-import core.SQL;
+import tools.AlertGenerator;
 
 public class InsertTimeController 
 {
@@ -200,49 +200,21 @@ public class InsertTimeController
 				catch(Exception e)
 				{	
 					e.printStackTrace();
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Fehler");
-					alert.setHeaderText("");
-					alert.setContentText("Fehler beim Speichern des Eintrags.");
-					alert.initOwner(stage);
-					Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-					dialogStage.getIcons().add(icon);
-					alert.showAndWait();						
+					AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Speichern des Eintrags.", icon, stage, null, false);									
 				}				
 				
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Gespeichert");
-				alert.setHeaderText("");
-				alert.setContentText("Der Eintrag wurde erfolgreich gespeichert.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+				AlertGenerator.showAlert(AlertType.INFORMATION, "Gespeichert", "", "Der Eintrag wurde erfolgreich gespeichert.", icon, stage, null, false);				
 				stage.close();
 				controller.loadAll();				
 			}
 			else
 			{
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Warnung");
-				alert.setHeaderText("");
-				alert.setContentText("Endzeit muss nach Startzeit liegen!");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+				AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Endzeit muss vor Startzeit liegen.", icon, stage, null, false);
 			}
 		}
 		else
 		{
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warnung");
-			alert.setHeaderText("");
-			alert.setContentText("Die Felder für Projekt und Task dürfen nicht leer sein!");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
+			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Die Felder für Projekt und Task dürfen nicht leer sein.", icon, stage, null, false);
 		}
 	}
 	

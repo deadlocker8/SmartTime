@@ -7,14 +7,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import org.jason.JSONArray;
+import org.jason.JSONObject;
+
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import org.jason.JSONArray;
-import org.jason.JSONObject;
+import tools.AlertGenerator;
 
 public class Importer
 {
@@ -52,29 +52,15 @@ public class Importer
 				sql.insert(o);
 			}
 			
-			Platform.runLater(()->{
-				Alert alert = new Alert(AlertType.INFORMATION);			
-				alert.setTitle("Erfolgreich importiert");
-				alert.setHeaderText("");
-				alert.setContentText("Der Importvorgang wurde erfolgreich abgeschlossen.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+			Platform.runLater(()->{				
+				AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich importiert", "", "Der Importvorgang wurde erfolgreich abgeschlossen.", icon, stage, null, false);
 			});
 		}
 		catch(Exception e)
 		{			
 			e.printStackTrace();
 			Platform.runLater(()->{
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Fehler");
-				alert.setHeaderText("");
-				alert.setContentText("Beim Importieren der Daten ist ein Fehler aufgetreten.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			});
 		}		
 	}	
@@ -91,29 +77,15 @@ public class Importer
 				currentDB.insert(item);
 			}
 			
-			Platform.runLater(()->{
-				Alert alert = new Alert(AlertType.INFORMATION);			
-				alert.setTitle("Erfolgreich importiert");
-				alert.setHeaderText("");
-				alert.setContentText("Der Importvorgang wurde erfolgreich abgeschlossen.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+			Platform.runLater(()->{				
+				AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich importiert", "", "Der Importvorgang wurde erfolgreich abgeschlossen.", icon, stage, null, false);
 			});
 		}
 		catch(Exception e)
 		{			
 			e.printStackTrace();
 			Platform.runLater(()->{
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Fehler");
-				alert.setHeaderText("");
-				alert.setContentText("Beim Importieren der Daten ist ein Fehler aufgetreten.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			});
 		}		
 	}
@@ -156,14 +128,7 @@ public class Importer
 		{			
 			e.printStackTrace();
 			Platform.runLater(()->{
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Fehler");
-				alert.setHeaderText("");
-				alert.setContentText("Beim Importieren der Daten ist ein Fehler aufgetreten.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			});
 		}					
 	}
@@ -180,8 +145,7 @@ public class Importer
 			list.add(line);
 		}
 		
-		reader.close();
-		
+		reader.close();		
 		return list;
 	}
 }

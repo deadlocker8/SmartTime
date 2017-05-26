@@ -57,6 +57,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import tools.AlertGenerator;
 import tools.ConvertTo;
 import tools.PathUtils;
 
@@ -141,15 +142,7 @@ public class UserInterfaceController
 				}
 			else
 			{
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Warnung");
-				alert.setHeaderText("");
-				alert.setContentText("Kein Projekt ausgewählt!");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
-
+				AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Kein Projekt ausgewählt.", icon, stage, null, false);
 				startButton.setSelected(false);
 			}
 		});
@@ -164,14 +157,7 @@ public class UserInterfaceController
 		// Prüft, ob die Stoppuhr noch läuft
 		if(stoppUhrLäuftFlag == true)
 		{
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warnung");
-			alert.setHeaderText("");
-			alert.setContentText("Stoppuhr läuft noch!");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
+			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Stoppuhr läuft noch!", icon, stage, null, false);			
 		}
 		else
 		{
@@ -214,14 +200,7 @@ public class UserInterfaceController
 		}
 		else
 		{
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warnung");
-			alert.setHeaderText("Stoppuhr läuft noch!");
-			alert.setContentText("Projekt und Task können nur geändert werden,\nwenn die Stoppuhr nicht läuft.");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
+			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "Stoppuhr läuft noch!", "Projekt und Task können nur geändert werden,\nwenn die Stoppuhr nicht läuft.", icon, stage, null, false);
 		}
 	}
 
@@ -292,14 +271,7 @@ public class UserInterfaceController
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Fehler");
-			alert.setHeaderText("");
-			alert.setContentText("Beim Laden der Daten ist ein Fehler aufgetreten.");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
+			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Laden der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 		}
 	}
 
@@ -331,14 +303,7 @@ public class UserInterfaceController
 			catch(Exception ex)
 			{
 				ex.printStackTrace();
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Fehler");
-				alert.setHeaderText("");
-				alert.setContentText("Fehler beim Erstellen der Datenbank.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Erstellen der Datenbank.", icon, stage, null, false);
 			}
 		}
 	}
@@ -521,14 +486,7 @@ public class UserInterfaceController
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Fehler");
-			alert.setHeaderText("");
-			alert.setContentText("Fehler beim Speichern des Eintrags.");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
+			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Speichern des Eintrags.", icon, stage, null, false);
 		}
 
 		loadAll();
@@ -671,23 +629,9 @@ public class UserInterfaceController
 			catch(IOException e)
 			{
 				e.printStackTrace();
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Fehler");
-				alert.setHeaderText("");
-				alert.setContentText("Beim Exportieren der Daten ist ein Fehler aufgetreten.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
-			}
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Erfolgreich exportiert");
-			alert.setHeaderText("");
-			alert.setContentText("Export erfolgreich abgeschlossen.");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
+				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
+			}			
+			AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "", "Export erfolgreich abgeschlossen.", icon, stage, null, false);
 		}
 	}
 
@@ -791,15 +735,8 @@ public class UserInterfaceController
 		}
 		catch(Exception e)
 		{
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Fehler");
-			alert.setHeaderText("");
-			alert.setContentText("Beim Aktualisieren des Eintrags ist ein Fehler aufgetreten.");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
 			e.printStackTrace();
+			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Aktualisieren des Eintrags ist ein Fehler aufgetreten.", icon, stage, null, false);
 		}
 	}
 
@@ -812,15 +749,8 @@ public class UserInterfaceController
 		}
 		catch(Exception e)
 		{
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Fehler");
-			alert.setHeaderText("");
-			alert.setContentText("Beim Löschen des Eintrags ist ein Fehler aufgetreten.");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
 			e.printStackTrace();
+			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Löschen des Eintrags ist ein Fehler aufgetreten.", icon, stage, null, false);
 		}
 	}
 	
@@ -844,27 +774,14 @@ public class UserInterfaceController
 			}
 			catch(Exception e)
 			{
-				Alert alert2 = new Alert(AlertType.ERROR);
-				alert2.setTitle("Fehler");
-				alert2.setHeaderText("");
-				alert2.setContentText("Beim Löschen der Datenbank ist ein Fehler aufgetreten.");
-				alert2.initOwner(stage);
-				Stage dialogStage2 = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage2.getIcons().add(icon);
-				alert2.showAndWait();
 				e.printStackTrace();
+				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Löschen der Datenbank ist ein Fehler aufgetreten.", icon, stage, null, false);
 			}			
 		}		
 	}
 
 	public void about()
 	{
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Über " + bundle.getString("app.name"));
-		alert.setHeaderText(bundle.getString("app.name"));
-		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDatum:      " + bundle.getString("version.date") + "\r\nAutor:        Robert Goldmann\r\n");
-		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-		dialogStage.getIcons().add(icon);
-		alert.showAndWait();
+		AlertGenerator.showAboutAlert(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", icon, stage, null, false);		
 	}	
 }

@@ -6,13 +6,13 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.jason.JSONObject;
+
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import org.jason.JSONObject;
+import tools.AlertGenerator;
 
 public class Exporter
 {
@@ -52,31 +52,17 @@ public class Exporter
 		
 			BufferedWriter out = new BufferedWriter(new FileWriter(file));		
             out.write(allItems.toString());           
-            out.close();    
-			
-			Platform.runLater(()->{
-				Alert alert = new Alert(AlertType.INFORMATION);			
-				alert.setTitle("Erfolgreich exportiert");
-				alert.setHeaderText("");
-				alert.setContentText("Der Exportvorgang wurde erfolgreich abgeschlossen.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+            out.close();   
+            
+			Platform.runLater(()->{				
+				AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "", "Der Exportvorgang wurde erfolgreich abgeschlossen.", icon, stage, null, false);
 			});
 		}
 		catch(Exception e)
 		{			
 			e.printStackTrace();
 			Platform.runLater(()->{
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Fehler");
-				alert.setHeaderText("");
-				alert.setContentText("Beim Exportieren der Daten ist ein Fehler aufgetreten.");
-				alert.initOwner(stage);
-				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-				dialogStage.getIcons().add(icon);
-				alert.showAndWait();
+				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			});
 		}		
 	}	

@@ -5,11 +5,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import tools.AlertGenerator;
 
 
 public class Main extends Application
@@ -42,12 +42,8 @@ public class Main extends Application
 				{
 					if(controller.stoppUhrLäuftFlag == true)
 					{
-						Alert alert = new Alert(AlertType.WARNING);
-						alert.setTitle("Warnung");
-						alert.setHeaderText("");
-						alert.setContentText("Stoppuhr läuft noch!");
-						alert.showAndWait();
-
+						AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Die Stoppuhr läuft noch!", new Image("/userInterface/icon.png"), stage, null, false);
+						
 						// "schluckt" die Aufforderung das Fenster zu schließen
 						// (Fenster wird dadurch nicht geschlossen)
 						we.consume();

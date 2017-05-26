@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
+import core.LogObject;
+import core.SQL;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -15,8 +17,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import core.LogObject;
-import core.SQL;
+import tools.AlertGenerator;
 
 
 public class EditController
@@ -86,14 +87,7 @@ public class EditController
 
 		if(project == null || project.equals("") || task == null || task.equals(""))
 		{
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warnung");
-			alert.setHeaderText("");
-			alert.setContentText("Die Felder dürfen nicht leer sein.");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
+			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Die Felder dürfen nicht leer sein.", icon, stage, null, false);
 		}
 		else
 		{

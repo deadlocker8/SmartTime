@@ -8,12 +8,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import tools.AlertGenerator;
 
 /**
  * Controllerklasse für das Projektfenster
@@ -96,14 +96,7 @@ public class ProjektFensterController
 
 		if(project == null || project.equals("") || task == null || task.equals(""))
 		{
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warnung");
-			alert.setHeaderText("");
-			alert.setContentText("Die Felder dürfen nicht leer sein.");
-			alert.initOwner(stage);
-			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-			dialogStage.getIcons().add(icon);
-			alert.showAndWait();
+			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Die Felder dürfen nicht leer sein.", icon, stage, null, false);
 		}
 		else
 		{
