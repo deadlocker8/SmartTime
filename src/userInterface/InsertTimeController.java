@@ -28,6 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import logger.Logger;
 import tools.AlertGenerator;
 
 public class InsertTimeController 
@@ -199,7 +200,7 @@ public class InsertTimeController
 				}
 				catch(Exception e)
 				{	
-					e.printStackTrace();
+					Logger.error(e);
 					AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Speichern des Eintrags.", icon, stage, null, false);									
 				}				
 				
@@ -424,7 +425,7 @@ public class InsertTimeController
 		}
 		catch(ParseException e)
 		{		
-			e.printStackTrace();
+			Logger.error(e);
 		}		
 		return false;				
 	}

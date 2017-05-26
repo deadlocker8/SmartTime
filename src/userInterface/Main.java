@@ -1,5 +1,9 @@
 package userInterface;
 
+import java.io.File;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +13,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import logger.FileOutputMode;
+import logger.Logger;
 import tools.AlertGenerator;
+import tools.PathUtils;
 
 
 public class Main extends Application
@@ -57,8 +64,24 @@ public class Main extends Application
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 		}
+	}
+	
+	@Override
+	public void init() throws Exception
+	{
+		ResourceBundle bundle = ResourceBundle.getBundle("userInterface/", Locale.GERMANY);
+		
+		Parameters params = getParameters();
+		String logLevelParam = params.getNamed().get("loglevel");		
+		Logger.setLevel(logLevelParam);	
+		
+		File logFolder = new File(PathUtils.getOSindependentPath() + "/Deadlocker/" + bundle.getString("app.name"));			
+		PathUtils.checkFolder(logFolder);
+		Logger.enableFileOutput(logFolder, System.out, System.err, FileOutputMode.COMBINED);
+		
+		Logger.appInfo(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"));		
 	}
 	
 	public static void main(String[] args)

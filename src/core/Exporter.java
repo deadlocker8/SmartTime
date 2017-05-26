@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import logger.Logger;
 import tools.AlertGenerator;
 
 public class Exporter
@@ -60,7 +61,7 @@ public class Exporter
 		}
 		catch(Exception e)
 		{			
-			e.printStackTrace();
+			Logger.error(e);
 			Platform.runLater(()->{
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			});

@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logger.Logger;
 import tools.AlertGenerator;
 
 @SuppressWarnings("rawtypes")
@@ -97,7 +98,7 @@ public class ChartGUIController
 						}
 						catch(Exception e)
 						{
-							e.printStackTrace();
+							Logger.error(e);
 							showErrorMessage();
 						}
 					}
@@ -125,7 +126,7 @@ public class ChartGUIController
 						}
 						catch(Exception e)
 						{
-							e.printStackTrace();
+							Logger.error(e);
 							showErrorMessage();
 						}
 					}
@@ -161,7 +162,7 @@ public class ChartGUIController
 								}
 								catch(Exception e)
 								{
-									e.printStackTrace();
+									Logger.error(e);
 									showErrorMessage();
 								}
 							}
@@ -181,7 +182,7 @@ public class ChartGUIController
 								}
 								catch(Exception e)
 								{
-									e.printStackTrace();
+									Logger.error(e);
 									showErrorMessage();
 								}
 							}
@@ -212,7 +213,7 @@ public class ChartGUIController
 								}
 								catch(Exception e)
 								{
-									e.printStackTrace();
+									Logger.error(e);
 									showErrorMessage();
 								}
 							}
@@ -230,7 +231,7 @@ public class ChartGUIController
 								}
 								catch(Exception e)
 								{
-									e.printStackTrace();
+									Logger.error(e);
 									showErrorMessage();
 								}
 							}
@@ -248,7 +249,7 @@ public class ChartGUIController
 									}
 									catch(Exception e)
 									{
-										e.printStackTrace();
+										Logger.error(e);
 										showErrorMessage();
 									}
 								}
@@ -266,7 +267,7 @@ public class ChartGUIController
 									}
 									catch(Exception e)
 									{
-										e.printStackTrace();
+										Logger.error(e);
 										showErrorMessage();
 									}
 								}
@@ -282,7 +283,7 @@ public class ChartGUIController
 									}
 									catch(Exception e)
 									{
-										e.printStackTrace();
+										Logger.error(e);
 										showErrorMessage();
 									}
 								}
@@ -300,7 +301,7 @@ public class ChartGUIController
 									}
 									catch(Exception e)
 									{
-										e.printStackTrace();
+										Logger.error(e);
 										showErrorMessage();
 									}
 								}
@@ -334,7 +335,7 @@ public class ChartGUIController
 									}								
 									catch(Exception e)
 									{
-										e.printStackTrace();
+										Logger.error(e);
 										showErrorMessage();
 									}
 								}
@@ -346,7 +347,7 @@ public class ChartGUIController
 									}
 									catch(Exception e)
 									{
-										e.printStackTrace();
+										Logger.error(e);
 										showErrorMessage();
 									}
 								}
@@ -366,7 +367,7 @@ public class ChartGUIController
 										}
 										catch(Exception e)
 										{
-											e.printStackTrace();
+											Logger.error(e);
 											showErrorMessage();										
 										}
 									}
@@ -378,7 +379,7 @@ public class ChartGUIController
 										}
 										catch(Exception e)
 										{
-											e.printStackTrace();
+											Logger.error(e);
 											showErrorMessage();										
 										}
 									}
@@ -397,7 +398,7 @@ public class ChartGUIController
 										catch(Exception e)
 										{
 											showErrorMessage();
-											e.printStackTrace();
+											Logger.error(e);
 										}
 									}
 									else
@@ -409,7 +410,7 @@ public class ChartGUIController
 										catch(Exception e)
 										{
 											showErrorMessage();
-											e.printStackTrace();
+											Logger.error(e);
 										}
 									}
 								}			
@@ -421,7 +422,7 @@ public class ChartGUIController
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage();
 		}
 	}

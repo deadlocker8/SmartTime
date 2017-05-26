@@ -57,6 +57,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import logger.Logger;
 import tools.AlertGenerator;
 import tools.ConvertTo;
 import tools.PathUtils;
@@ -270,7 +271,7 @@ public class UserInterfaceController
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Laden der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 		}
 	}
@@ -295,7 +296,7 @@ public class UserInterfaceController
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 			try
 			{
 				sql.createDB();
@@ -446,7 +447,7 @@ public class UserInterfaceController
 		}
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -485,7 +486,7 @@ public class UserInterfaceController
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Speichern des Eintrags.", icon, stage, null, false);
 		}
 
@@ -525,7 +526,7 @@ public class UserInterfaceController
 		}
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -628,7 +629,7 @@ public class UserInterfaceController
 			}
 			catch(IOException e)
 			{
-				e.printStackTrace();
+				Logger.error(e);
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			}			
 			AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "", "Export erfolgreich abgeschlossen.", icon, stage, null, false);
@@ -735,7 +736,7 @@ public class UserInterfaceController
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Aktualisieren des Eintrags ist ein Fehler aufgetreten.", icon, stage, null, false);
 		}
 	}
@@ -749,7 +750,7 @@ public class UserInterfaceController
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Logger.error(e);
 			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Löschen des Eintrags ist ein Fehler aufgetreten.", icon, stage, null, false);
 		}
 	}
@@ -774,7 +775,7 @@ public class UserInterfaceController
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				Logger.error(e);
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Löschen der Datenbank ist ein Fehler aufgetreten.", icon, stage, null, false);
 			}			
 		}		

@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import logger.Logger;
 import tools.AlertGenerator;
 
 public class Importer
@@ -58,7 +59,7 @@ public class Importer
 		}
 		catch(Exception e)
 		{			
-			e.printStackTrace();
+			Logger.error(e);
 			Platform.runLater(()->{
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			});
@@ -83,7 +84,7 @@ public class Importer
 		}
 		catch(Exception e)
 		{			
-			e.printStackTrace();
+			Logger.error(e);
 			Platform.runLater(()->{
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			});
@@ -126,7 +127,7 @@ public class Importer
 		}
 		catch(Exception e)
 		{			
-			e.printStackTrace();
+			Logger.error(e);
 			Platform.runLater(()->{
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
 			});
