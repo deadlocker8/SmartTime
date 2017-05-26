@@ -1,6 +1,7 @@
 package core;
 
 import javafx.application.Platform;
+import tools.ConvertTo;
 import userInterface.UserInterfaceController;
 
 /**
@@ -29,7 +30,7 @@ public class Counter extends Thread
 					 //konvertiert die bereits verstrichenen Millisekunden in Stunden, Minuten und Sekunden
 					 //und gibt diese auf dem Label aus
 					 Platform.runLater(()->{
-						uic.labelTime.setText(ConvertToTime.ConvertMillisToTime(ausgabe));
+						uic.labelTime.setText(ConvertTo.ConvertMillisToTime(ausgabe));
 					 });
 					 
 					 //schläft 1000 Millisekunden

@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import charts.ChartGUIController;
-import core.ConvertToTime;
 import core.Exporter;
 import core.Importer;
 import core.LogObject;
@@ -58,6 +57,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import tools.ConvertTo;
 import tools.PathUtils;
 
 
@@ -409,7 +409,7 @@ public class UserInterfaceController
 			public ObservableValue<String> call(CellDataFeatures<LogObject, String> param)
 			{
 				StringProperty value = new SimpleStringProperty();
-				value.set(ConvertToTime.ConvertMillisToTime(param.getValue().getDuration()));
+				value.set(ConvertTo.ConvertMillisToTime(param.getValue().getDuration()));
 				return value;
 			}
 		});
@@ -542,7 +542,7 @@ public class UserInterfaceController
 			total += current.getDuration();
 		}
 
-		return ConvertToTime.ConvertMillisToTime(total);
+		return ConvertTo.ConvertMillisToTime(total);
 	}
 
 	public void insertTime()

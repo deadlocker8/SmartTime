@@ -3,6 +3,8 @@ package core;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import tools.ConvertTo;
+
 /**
  * Klasse "Logobject" - generiert Objekte, die alle wichtigen Eigenschaften für das Logfile enthalten
  * @author Robert
@@ -38,7 +40,7 @@ public class LogObject
 	
 	public String toString()
 	{
-		return day + "." + month + "." + year + "  " + startTime + " bis " + endTime + "\t" + project + "\t" + task +"\t" + duration + " (" +  ConvertToTime.ConvertMillisToTime(duration)+ ")"; 
+		return day + "." + month + "." + year + "  " + startTime + " bis " + endTime + "\t" + project + "\t" + task +"\t" + duration + " (" +  ConvertTo.ConvertMillisToTime(duration)+ ")"; 
 	}
 	
 	public void createStartTime()

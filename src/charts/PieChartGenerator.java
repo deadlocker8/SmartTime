@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
+import tools.ConvertTo;
 import core.LogObject;
 import core.SQL;
 
@@ -51,7 +52,7 @@ public class PieChartGenerator
 	        double percentage = (pieValue/total) * 100;
 	        String percent = String.valueOf(percentage);
 	        percent = percent.substring(0, percent.indexOf(".") + 2);	      
-	        String time = core.ConvertToTime.ConvertMillisToTime((long) pieValue);
+	        String time = ConvertTo.ConvertMillisToTime((long) pieValue);
 		 
 		    tooltip.setText(percent + " % \n" + time);
 		    Tooltip.install(tool.getNode(), tooltip);

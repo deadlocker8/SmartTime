@@ -3,14 +3,14 @@ package charts;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import core.LogObject;
+import core.SQL;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import core.ConvertToTime;
-import core.LogObject;
-import core.SQL;
+import tools.ConvertTo;
 
 public class SummaryGenerator
 {
@@ -49,7 +49,7 @@ public class SummaryGenerator
 		
 		ArrayList<LogObject> objects = sql.getByProjectAndTask(project, task);
 		
-		Label labelTotalTime = new Label(ConvertToTime.ConvertMillisToTime(completeTime(objects)));
+		Label labelTotalTime = new Label(ConvertTo.ConvertMillisToTime(completeTime(objects)));
 		labelTotalTime.setStyle("-fx-font-size: 25;");
 		
 		int days = workingDays(objects);
@@ -86,7 +86,7 @@ public class SummaryGenerator
 		
 		ArrayList<LogObject> objects = sql.getByProjectAndTaskAndYear(project, task, year);
 		
-		Label labelTotalTime = new Label(ConvertToTime.ConvertMillisToTime(completeTime(objects)));
+		Label labelTotalTime = new Label(ConvertTo.ConvertMillisToTime(completeTime(objects)));
 		labelTotalTime.setStyle("-fx-font-size: 25;");
 		
 		int days = workingDays(objects);
