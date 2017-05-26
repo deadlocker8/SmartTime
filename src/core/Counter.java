@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import userInterface.UserInterfaceController;
 
 /**
- * Thread für die zeitgleiche Ausführung der Zeitmessung ohne Beeinträchtigung der Hauptanwendung
+ * Thread fÃ¼r die zeitgleiche AusfÃ¼hrung der Zeitmessung ohne BeeintrÃ¤chtigung der Hauptanwendung
  * @author Robert
  *
  */
@@ -17,9 +17,9 @@ public class Counter extends Thread
 	@Override
 	public void run() 
 	{		
-			//löscht zu Beginn den Text des Labels
+			//lÃ¶scht zu Beginn den Text des Labels
 			uic.labelTime.setText("");
-			//initialisiert die Zählvariable
+			//initialisiert die ZÃ¤hlvariable
 			ausgabe = 0;
 				
 			 while (running) 
@@ -32,12 +32,12 @@ public class Counter extends Thread
 						uic.labelTime.setText(ConvertToTime.ConvertMillisToTime(ausgabe));
 					 });
 					 
-					 //schläft 1000 Millisekunden
+					 //schlÃ¤ft 1000 Millisekunden
 					 Thread.sleep(1000);
-					 //erhöht die Zählvariable um 1000 Millisekunden
+					 //erhÃ¶ht die ZÃ¤hlvariable um 1000 Millisekunden
 					 ausgabe = ausgabe + 1000;
 				 }
-				 //reagiert auf eine InterruptedException, die ausgelöst wird, wenn der Stopp-Button gedrückt wird
+				 //reagiert auf eine InterruptedException, die ausgelÃ¶st wird, wenn der Stopp-Button gedrÃ¼ckt wird
 				 catch (InterruptedException e) 
 				 {
 					 running = false;

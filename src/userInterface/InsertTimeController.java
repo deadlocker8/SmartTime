@@ -238,7 +238,7 @@ public class InsertTimeController
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warnung");
 			alert.setHeaderText("");
-			alert.setContentText("Die Felder für Projekt und Task dürfen nicht leer sein!");
+			alert.setContentText("Die Felder fÃ¼r Projekt und Task dÃ¼rfen nicht leer sein!");
 			alert.initOwner(stage);
 			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 			dialogStage.getIcons().add(icon);

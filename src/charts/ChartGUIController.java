@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import core.LogObject;
 import core.SQL;
+import core.Utils;
 
 @SuppressWarnings("rawtypes")
 public class ChartGUIController
@@ -38,12 +39,13 @@ public class ChartGUIController
 	private Image icon;
 	private PieChartGenerator generator;
 	private SummaryGenerator summaryGenerator;
-	private BarChartGenerator barChartGenertator;
+	private BarChartGenerator barChartGenertator;	
 	
 	public void init(String savePath, Stage stage, Image icon)
 	{
 		try
 		{
+		    this.stage = stage;
 			this.icon = icon;
 			sql = new SQL(savePath);
 
@@ -340,7 +342,7 @@ public class ChartGUIController
 								{
 									try
 									{
-										showPieChart(generator.getChart0011(Integer.parseInt(selectedYear), getMonthNumber(selectedMonth), "Alle Projekte - " + selectedMonth + " " + selectedYear));
+										showPieChart(generator.getChart0011(Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth), "Alle Projekte - " + selectedMonth + " " + selectedYear));
 									}
 									catch(Exception e)
 									{
@@ -372,7 +374,7 @@ public class ChartGUIController
 									{
 										try
 										{
-											showPieChart(generator.getChart1011(selectedProject, Integer.parseInt(selectedYear), getMonthNumber(selectedMonth), selectedProject + " - " + selectedMonth + " " + selectedYear));
+											showPieChart(generator.getChart1011(selectedProject, Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth), selectedProject + " - " + selectedMonth + " " + selectedYear));
 										}
 										catch(Exception e)
 										{
@@ -402,7 +404,7 @@ public class ChartGUIController
 									{
 										try
 										{
-											showBarChart(barChartGenertator.getBarChart(selectedProject, selectedTask, Integer.parseInt(selectedYear), getMonthNumber(selectedMonth)));
+											showBarChart(barChartGenertator.getBarChart(selectedProject, selectedTask, Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth)));
 										}
 										catch(Exception e)
 										{
@@ -423,20 +425,6 @@ public class ChartGUIController
 			showErrorMessage();
 		}
 	}
-
-	// public void zeigenButton()
-	// {
-	// charts.Projects.getChart(Main.dates, Main.projects, Main.differences);
-	// BarChart chart = charts.Projects.getSpecificChart(monthBox.getValue(),
-	// yearBox.getValue(), projectBox.getValue());
-	// chartPane.getChildren().clear();
-	// chartPane.getChildren().add(chart);
-	// AnchorPane.setBottomAnchor(chart, 14.0);
-	// AnchorPane.setTopAnchor(chart, 0.0);
-	// AnchorPane.setLeftAnchor(chart, 14.0);
-	// AnchorPane.setRightAnchor(chart, 14.0);
-	// chartPane.setMaxHeight(Double.MAX_VALUE);
-	// }
 	
 	private void showErrorMessage()
 	{
@@ -513,71 +501,13 @@ public class ChartGUIController
 
 		ArrayList<Integer> monthsList = new ArrayList<Integer>(months2);
 
-		ArrayList<String> monthNames = new ArrayList<String>();
+		ArrayList<String> monthNames = new ArrayList<String>();		
 
 		for(int k = 0; k < monthsList.size(); k++)
 		{
-			switch(monthsList.get(k))
-			{
-				case 1:
-					monthNames.add("Januar");
-					break;
-				case 2:
-					monthNames.add("Februar");
-					break;
-				case 3:
-					monthNames.add("März");
-					break;
-				case 4:
-					monthNames.add("April");
-					break;
-				case 5:
-					monthNames.add("Mai");
-					break;
-				case 6:
-					monthNames.add("Juni");
-					break;
-				case 7:
-					monthNames.add("Juli");
-					break;
-				case 8:
-					monthNames.add("August");
-					break;
-				case 9:
-					monthNames.add("September");
-					break;
-				case 10:
-					monthNames.add("Oktober");
-					break;
-				case 11:
-					monthNames.add("November");
-					break;
-				case 12:
-					monthNames.add("Dezember");
-					break;
-			}
+		    monthNames.add(Utils.getMonthName(k));
 		}
 
 		return monthNames;
-	}
-	
-	private int getMonthNumber(String monthName)
-	{
-		switch(monthName)
-		{
-			case "Januar":		return 1;
-			case "Februar":		return 2;	
-			case "März":		return 3;	
-			case "April":		return 4;	
-			case "Mai":			return 5;	
-			case "Juni":		return 6;	
-			case "Juli":		return 7;	
-			case "August":		return 8;	
-			case "September":	return 9;	
-			case "Oktober":		return 10;	
-			case "November":	return 11;	
-			case "Dezember":	return 12;	
-			default:			return 0;			
-		}	
-	}
+	}	
 }

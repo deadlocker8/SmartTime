@@ -28,28 +28,27 @@ public class Main extends Application
 			stage.setTitle("SmartTime");
 			stage.setScene(scene);
 			
-			UserInterfaceController controller = (UserInterfaceController)loader.getController();
-			controller.setStage(stage);
-			controller.init();
+			UserInterfaceController controller = (UserInterfaceController)loader.getController();			
+			controller.init(stage);
 
 			stage.getIcons().add(new Image("/userInterface/icon.png"));
 			stage.show();
 
-			// f‰ngt die Aufforderung das Fenster zu schlieﬂen ab, um vorher
-			// noch eine Pr¸fung duchzuf¸hren
+			// f√§ngt die Aufforderung das Fenster zu schlie√üen ab, um vorher
+			// noch eine Pr√ºfung duchzuf√ºhren
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>()
 			{
 				public void handle(WindowEvent we)
 				{
-					if(controller.stoppUhrL‰uftFlag == true)
+					if(controller.stoppUhrL√§uftFlag == true)
 					{
 						Alert alert = new Alert(AlertType.WARNING);
 						alert.setTitle("Warnung");
 						alert.setHeaderText("");
-						alert.setContentText("Stoppuhr l‰uft noch!");
+						alert.setContentText("Stoppuhr l√§uft noch!");
 						alert.showAndWait();
 
-						// "schluckt" die Aufforderung das Fenster zu schlieﬂen
+						// "schluckt" die Aufforderung das Fenster zu schlie√üen
 						// (Fenster wird dadurch nicht geschlossen)
 						we.consume();
 					}

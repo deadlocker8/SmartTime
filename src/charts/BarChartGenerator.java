@@ -16,6 +16,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import core.LogObject;
 import core.SQL;
+import core.Utils;
 
 public class BarChartGenerator
 {
@@ -50,46 +51,13 @@ public class BarChartGenerator
 		return numDays;
 	}
 
-	private String getMonthName(int month)
-	{
-		switch(month)
-		{
-			case 1:
-				return "Januar";
-			case 2:
-				return "Februar";
-			case 3:
-				return "März";
-			case 4:
-				return "April";
-			case 5:
-				return "Mai";
-			case 6:
-				return "Juni";
-			case 7:
-				return "Juli";
-			case 8:
-				return "August";
-			case 9:
-				return "September";
-			case 10:
-				return "Oktober";
-			case 11:
-				return "November";
-			case 12:
-				return "Dezember";
-			default:
-				return null;
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	public BarChart<String, Number> getBarChart(String project, String task, int year, int month) throws Exception
 	{
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		final BarChart<String, Number> chart = new BarChart<String, Number>(xAxis, yAxis);
-		chart.setTitle(project + " - " + task + " - " + getMonthName(month) + " " + year);
+		chart.setTitle(project + " - " + task + " - " + Utils.getMonthName(month) + " " + year);
 		xAxis.setLabel("Tag");
 		yAxis.setLabel("Zeit in Minuten");
 		chart.setCategoryGap(2);

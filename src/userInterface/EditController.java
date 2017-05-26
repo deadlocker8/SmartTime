@@ -29,9 +29,10 @@ public class EditController
 	private Image icon;
 	private LogObject object;
 
-	public void init(UserInterfaceController controller, String savePath, Image icon, LogObject object)
+	public void init(UserInterfaceController controller, Stage stage, String savePath, Image icon, LogObject object)
 	{
 		this.controller = controller;
+		this.stage = stage;
 		this.icon = icon;
 		this.object = object;
 
@@ -74,13 +75,7 @@ public class EditController
 		});
 		
 		dropdown.getSelectionModel().select(object.getProject());
-		dropdownTasks.getSelectionModel().select(object.getTask());
-		
-	}
-
-	public void setStage(Stage s)
-	{
-		stage = s;
+		dropdownTasks.getSelectionModel().select(object.getTask());		
 	}
 
 	public void okButton(ActionEvent e)
@@ -94,7 +89,7 @@ public class EditController
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warnung");
 			alert.setHeaderText("");
-			alert.setContentText("Die Felder dürfen nicht leer sein.");
+			alert.setContentText("Die Felder dÃ¼rfen nicht leer sein.");
 			alert.initOwner(stage);
 			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 			dialogStage.getIcons().add(icon);
@@ -111,9 +106,9 @@ public class EditController
 	public void buttonDelete()
 	{
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Löschen");
+		alert.setTitle("LÃ¶schen");
 		alert.setHeaderText("");
-		alert.setContentText("Möchten Sie den Eintrag wirklich unwiederruflich aus der Datenbank löschen?");
+		alert.setContentText("MÃ¶chten Sie den Eintrag wirklich unwiederruflich aus der Datenbank lÃ¶schen?");
 		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(icon);
 		
@@ -125,7 +120,7 @@ public class EditController
 		}		
 	}
 
-	public void abbrechenButtond(ActionEvent e)
+	public void abbrechenButton(ActionEvent e)
 	{
 		stage.close();
 	}

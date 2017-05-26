@@ -13,7 +13,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="abbrechenButton" layoutX="298.0" layoutY="221.0" mnemonicParsing="false" onAction="#abbrechenButtond" prefHeight="30.0" prefWidth="92.0" text="Abbrechen">
+      <Button fx:id="abbrechenButton" layoutX="298.0" layoutY="221.0" mnemonicParsing="false" onAction="#abbrechenButton" prefHeight="30.0" prefWidth="92.0" text="Abbrechen">
          <font>
             <Font size="14.0" />
          </font>

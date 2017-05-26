@@ -12,7 +12,12 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import tools.PathUtils;
+import charts.ChartGUIController;
+import core.ConvertToTime;
+import core.Exporter;
+import core.Importer;
+import core.LogObject;
+import core.SQL;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -53,12 +58,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import charts.ChartGUIController;
-import core.ConvertToTime;
-import core.Exporter;
-import core.Importer;
-import core.LogObject;
-import core.SQL;
+import tools.PathUtils;
 
 
 public class UserInterfaceController
@@ -76,7 +76,7 @@ public class UserInterfaceController
 
 	private Stage stage;
 	private core.Counter stoppUhr;
-	public boolean stoppUhrLäuftFlag;
+	public boolean stoppUhrLÃ¤uftFlag;
 	public boolean projektExistiertFlag;
 	private ArrayList<TreeItem<HBox>> aktuelleTasks;
 	private TreeItem<HBox> item;
@@ -91,18 +91,19 @@ public class UserInterfaceController
 	private Image icon;
 	private final ResourceBundle bundle = ResourceBundle.getBundle("userInterface/", Locale.GERMANY);
 
-	public void init()
+	public void init(Stage stage)
 	{		
+	    this.stage = stage;
+	    
 		PathUtils.checkFolder(new File(new File(savePath).getParent()));
 		icon = new Image("/userInterface/icon.png");
 
 		accordion.setExpandedPane(gesamtesLog);
 
 		projektExistiertFlag = false;
-		stoppUhrLäuftFlag = false;
+		stoppUhrLÃ¤uftFlag = false;
 
-		labelTime.setText("0 h  0  min  0 sek");
-		stoppUhrLäuftFlag = false;
+		labelTime.setText("0 h  0  min  0 sek");		
 
 		loadAll();
 
@@ -113,7 +114,7 @@ public class UserInterfaceController
 
 				if(startButton.isSelected())
 				{
-					stoppUhrLäuftFlag = true;
+					stoppUhrLÃ¤uftFlag = true;
 
 					labelTime.setText("");
 					core.Counter.ausgabe = 0;
@@ -129,7 +130,7 @@ public class UserInterfaceController
 				}
 				else
 				{
-					stoppUhrLäuftFlag = false;
+					stoppUhrLÃ¤uftFlag = false;
 					startButton.setText("Start");
 
 					stoppUhr.interrupt();
@@ -143,7 +144,7 @@ public class UserInterfaceController
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("Warnung");
 				alert.setHeaderText("");
-				alert.setContentText("Kein Projekt ausgewählt!");
+				alert.setContentText("Kein Projekt ausgewÃ¤hlt!");
 				alert.initOwner(stage);
 				Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 				dialogStage.getIcons().add(icon);
@@ -155,18 +156,18 @@ public class UserInterfaceController
 	}
 
 	/**
-	 * Fängt die Aufforderung das Fenster zu schließen ab, um vorher noch eine
-	 * Prüfung duchzuführen
+	 * FÃ¤ngt die Aufforderung das Fenster zu schlieÃŸen ab, um vorher noch eine
+	 * PrÃ¼fung duchzufÃ¼hren
 	 */
 	public void closeRequest()
 	{
-		// Prüft, ob die Stoppuhr noch läuft
-		if(stoppUhrLäuftFlag == true)
+		// PrÃ¼ft, ob die Stoppuhr noch lÃ¤uft
+		if(stoppUhrLÃ¤uftFlag == true)
 		{
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warnung");
 			alert.setHeaderText("");
-			alert.setContentText("Stoppuhr läuft noch!");
+			alert.setContentText("Stoppuhr lÃ¤uft noch!");
 			alert.initOwner(stage);
 			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 			dialogStage.getIcons().add(icon);
@@ -178,11 +179,6 @@ public class UserInterfaceController
 		}
 	}
 
-	public void setStage(Stage s)
-	{
-		stage = s;
-	}
-
 	public void setLabels(String project, String task)
 	{
 		aktuellesProjektAusgabe.setText(project);
@@ -191,25 +187,25 @@ public class UserInterfaceController
 
 	public void openProjectGUI(ActionEvent e)
 	{
-		if( ! stoppUhrLäuftFlag)
+		if( ! stoppUhrLÃ¤uftFlag)
 		{
 			try
 			{
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("projektFenster.fxml"));
 				Parent root = (Parent)fxmlLoader.load();
-				Stage stage = new Stage();
-				stage.setScene(new Scene(root, 455, 300));
-				stage.setTitle("Neues Projekt");
+				Stage newStage = new Stage();
+				newStage.setScene(new Scene(root, 455, 300));
+				newStage.setTitle("Neues Projekt");
+				newStage.initOwner(stage);
 
-				stage.getIcons().add(icon);
+				newStage.getIcons().add(icon);
 
 				ProjektFensterController pfc = (ProjektFensterController)fxmlLoader.getController();
-				pfc.setStage(stage);
-				pfc.init(this, savePath, icon);
+				pfc.init(this, stage, savePath, icon);
 
-				stage.setResizable(false);
-				stage.initModality(Modality.APPLICATION_MODAL);
-				stage.showAndWait();
+				newStage.setResizable(false);
+				newStage.initModality(Modality.APPLICATION_MODAL);
+				newStage.showAndWait();
 			}
 			catch(IOException d)
 			{
@@ -220,8 +216,8 @@ public class UserInterfaceController
 		{
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warnung");
-			alert.setHeaderText("Stoppuhr läuft noch!");
-			alert.setContentText("Projekt und Task können nur geändert werden,\nwenn die Stoppuhr nicht läuft.");
+			alert.setHeaderText("Stoppuhr lÃ¤uft noch!");
+			alert.setContentText("Projekt und Task kÃ¶nnen nur geÃ¤ndert werden,\nwenn die Stoppuhr nicht lÃ¤uft.");
 			alert.initOwner(stage);
 			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 			dialogStage.getIcons().add(icon);
@@ -279,12 +275,12 @@ public class UserInterfaceController
 					box2.getChildren().add(labelTask);
 					box2.getChildren().add(labelTaskTime);
 
-					// und ein neus TreeItem erzeugt, was später Kind des
-					// übergeordneten Knoten mit dem Projektnamen sein wird
+					// und ein neus TreeItem erzeugt, was spÃ¤ter Kind des
+					// Ã¼bergeordneten Knoten mit dem Projektnamen sein wird
 					aktuelleTasks.add(new TreeItem<HBox>(box2));
 				}
 
-				// fügt alle TreeItems der Ansicht hinzu
+				// fÃ¼gt alle TreeItems der Ansicht hinzu
 				item.getChildren().setAll(aktuelleTasks);
 				alleTasks.add(item);
 			}
@@ -469,18 +465,19 @@ public class UserInterfaceController
 			Parent root = (Parent)fxmlLoader.load();
 			Scene scene = new Scene(root, 800, 600);
 			scene.getStylesheets().add("charts/Chart.css");
-			Stage stage = new Stage();
-			stage.setScene(scene);
-			stage.setTitle("Diagramme");
+			Stage newStage = new Stage();
+			newStage.setScene(scene);
+			newStage.setTitle("Diagramme");
 			ChartGUIController controller = (ChartGUIController)fxmlLoader.getController();
 			controller.init(savePath, stage, icon);
-			stage.getIcons().add(icon);
+			newStage.getIcons().add(icon);
+			newStage.initOwner(stage);
 
-			stage.setResizable(true);
-			stage.setMinWidth(800);
-			stage.setMinHeight(600);
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.showAndWait();
+			newStage.setResizable(true);
+			newStage.setMinWidth(800);
+			newStage.setMinHeight(600);
+			newStage.initModality(Modality.APPLICATION_MODAL);
+			newStage.showAndWait();
 		}
 		catch(IOException e)
 		{
@@ -504,14 +501,14 @@ public class UserInterfaceController
 
 	private void startClock()
 	{
-		stoppUhrLäuftFlag = true;
+		stoppUhrLÃ¤uftFlag = true;
 		log.createStartTime();
 		startTimestamp = System.currentTimeMillis();
 	}
 
 	private void endClock()
 	{
-		stoppUhrLäuftFlag = false;
+		stoppUhrLÃ¤uftFlag = false;
 		log.createEndTime();
 		endTimestamp = System.currentTimeMillis();
 		log.setDuration(endTimestamp - startTimestamp);
@@ -555,17 +552,18 @@ public class UserInterfaceController
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/userInterface/InsertTimeGUI.fxml"));
 			Parent root = (Parent)fxmlLoader.load();
 			Scene scene = new Scene(root, 540, 400);
-			Stage stage = new Stage();
-			stage.setScene(scene);
-			stage.setTitle("Zeit nachträglich einfügen");
+			Stage newStage = new Stage();
+			newStage.setScene(scene);
+			newStage.setTitle("Zeit nachtrÃ¤glich einfÃ¼gen");
 
 			InsertTimeController controller = (InsertTimeController)fxmlLoader.getController();
 			controller.init(stage, this, savePath, icon);
-			stage.getIcons().add(icon);
+			newStage.getIcons().add(icon);
+			newStage.initOwner(stage);
 
-			stage.setResizable(false);
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.showAndWait();
+			newStage.setResizable(false);
+			newStage.initModality(Modality.APPLICATION_MODAL);
+			newStage.showAndWait();
 		}
 		catch(IOException e)
 		{
@@ -765,19 +763,18 @@ public class UserInterfaceController
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("editGUI.fxml"));
 			Parent root = (Parent)fxmlLoader.load();
-			Stage stage = new Stage();
-			stage.setScene(new Scene(root, 455, 280));
-			stage.setTitle("Eintrag bearbeiten");
+			Stage newStage = new Stage();
+			newStage.setScene(new Scene(root, 455, 280));
+			newStage.setTitle("Eintrag bearbeiten");
+			newStage.getIcons().add(icon);
+			newStage.initOwner(stage);
 
-			stage.getIcons().add(icon);
+			EditController pfc = (EditController)fxmlLoader.getController();			
+			pfc.init(this, stage, savePath, icon, object);
 
-			EditController pfc = (EditController)fxmlLoader.getController();
-			pfc.setStage(stage);
-			pfc.init(this, savePath, icon, object);
-
-			stage.setResizable(false);
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.showAndWait();			
+			newStage.setResizable(false);
+			newStage.initModality(Modality.APPLICATION_MODAL);
+			newStage.showAndWait();			
 		}
 		catch(IOException d)
 		{
@@ -818,7 +815,7 @@ public class UserInterfaceController
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Fehler");
 			alert.setHeaderText("");
-			alert.setContentText("Beim Löschen des Eintrags ist ein Fehler aufgetreten.");
+			alert.setContentText("Beim LÃ¶schen des Eintrags ist ein Fehler aufgetreten.");
 			alert.initOwner(stage);
 			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 			dialogStage.getIcons().add(icon);
@@ -830,9 +827,9 @@ public class UserInterfaceController
 	public void deleteDB()
 	{
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Löschen");
+		alert.setTitle("LÃ¶schen");
 		alert.setHeaderText("");
-		alert.setContentText("Möchten Sie die gesamte Datenbank wirklich unwiederruflich löschen?");
+		alert.setContentText("MÃ¶chten Sie die gesamte Datenbank wirklich unwiederruflich lÃ¶schen?");
 		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(icon);
 		
@@ -850,7 +847,7 @@ public class UserInterfaceController
 				Alert alert2 = new Alert(AlertType.ERROR);
 				alert2.setTitle("Fehler");
 				alert2.setHeaderText("");
-				alert2.setContentText("Beim Löschen der Datenbank ist ein Fehler aufgetreten.");
+				alert2.setContentText("Beim LÃ¶schen der Datenbank ist ein Fehler aufgetreten.");
 				alert2.initOwner(stage);
 				Stage dialogStage2 = (Stage)alert.getDialogPane().getScene().getWindow();
 				dialogStage2.getIcons().add(icon);
@@ -863,7 +860,7 @@ public class UserInterfaceController
 	public void about()
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Über " + bundle.getString("app.name"));
+		alert.setTitle("Ãœber " + bundle.getString("app.name"));
 		alert.setHeaderText(bundle.getString("app.name"));
 		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDatum:      " + bundle.getString("version.date") + "\r\nAutor:        Robert Goldmann\r\n");
 		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();

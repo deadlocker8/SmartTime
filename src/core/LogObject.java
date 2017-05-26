@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Klasse "Logobject" - generiert Objekte, die alle wichtigen Eigenschaften für das Logfile enthalten
+ * Klasse "Logobject" - generiert Objekte, die alle wichtigen Eigenschaften fÃ¼r das Logfile enthalten
  * @author Robert
  *
  */

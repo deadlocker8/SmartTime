@@ -208,7 +208,7 @@ public class TimePickerController implements Initializable
 		vboxSeconds.getChildren().add(buttonSecondsDown);
 		vboxSeconds.setAlignment(Pos.CENTER);
 
-	//Hinzufügen zur HBox
+	//HinzufÃ¼gen zur HBox
 		Label separator = new Label(" : ");
 		separator.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
 		Label separator2 = new Label(" : ");

@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Klasse "Logobject" - generiert Objekte, die alle wichtigen Eigenschaften für das Logfile enthalten
+ * Klasse "Logobject" - generiert Objekte, die alle wichtigen Eigenschaften fÃ¼r das Logfile enthalten
  * @author Robert
  *
  */
@@ -60,7 +60,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * toString für Ausgabe in Datei
+	 * toString fÃ¼r Ausgabe in Datei
 	 * @return String - date + starttime + endtime + startUhtzeit + endUhrzeit + project + task + differenz + time
 	 */
 	public String toString()
@@ -69,7 +69,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * toString für Ausgabe im Programm
+	 * toString fÃ¼r Ausgabe im Programm
 	 * @return String - date + startUhtzeit + endUhrzeit + project + task + time
 	 */
 	public String toString2()
@@ -124,7 +124,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * gibt den Projektnamen zurück
+	 * gibt den Projektnamen zurÃ¼ck
 	 * @return String - Projektname
 	 */
 	public String getProject()
@@ -133,7 +133,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * gibt den Tasknamen zurück
+	 * gibt den Tasknamen zurÃ¼ck
 	 * @return String - Taskname
 	 */
 	public String getTask()
@@ -142,7 +142,7 @@ public class LogObjectOld
 	}
 	
 	/**
-	 * gibt die Differenz in Millisekundne zurück
+	 * gibt die Differenz in Millisekundne zurÃ¼ck
 	 * @return long - Differenz
 	 */
 	public long getDifferenz()
@@ -151,7 +151,7 @@ public class LogObjectOld
 	}	
 
 	/**
-	 * gibt das Datum zurück
+	 * gibt das Datum zurÃ¼ck
 	 * @return String - Datum
 	 */
 	public String getDate()
@@ -160,7 +160,7 @@ public class LogObjectOld
 	}	
 	
 	/**
-	 * gibt die Startuhrzeit zurück
+	 * gibt die Startuhrzeit zurÃ¼ck
 	 * @return String - Startuhrzeit
 	 */
 	public String getStartUhrzeit()
@@ -169,7 +169,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * gibt die Enduhrzeit zurück
+	 * gibt die Enduhrzeit zurÃ¼ck
 	 * @return String - Enduhrzeit
 	 */
 	public String getEndUhrzeit()
@@ -178,7 +178,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * gibt die Differenz zurück
+	 * gibt die Differenz zurÃ¼ck
 	 * @return String - Differenz
 	 */
 	public String getTime()
@@ -196,7 +196,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * gibt die Startuhrzeit zurück
+	 * gibt die Startuhrzeit zurÃ¼ck
 	 * @return String - Startuhrzeit
 	 */
 	public long getStarttime()
@@ -205,7 +205,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * gibt die Enduhrzeit zurück
+	 * gibt die Enduhrzeit zurÃ¼ck
 	 * @return String - Enduhrzeit
 	 */
 	public long getEndtime()
@@ -214,7 +214,7 @@ public class LogObjectOld
 	}
 
 	/**
-	 * setzt den Wert für die Differenz in Stunden, Minuten und Sekunden
+	 * setzt den Wert fÃ¼r die Differenz in Stunden, Minuten und Sekunden
 	 * @param time String - Zeit in der Form "Stunden + Minuten + Sekunden"
 	 */
 	public void setTime(String time)

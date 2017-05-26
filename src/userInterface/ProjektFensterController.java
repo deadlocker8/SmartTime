@@ -7,7 +7,6 @@ import core.SQL;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -15,16 +14,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
- * Controllerklasse für das Projektfenster
+ * Controllerklasse fÃ¼r das Projektfenster
  * 
  * @author Robert
  *
  */
 
-public class ProjektFensterController implements EventHandler<WindowEvent>
+public class ProjektFensterController
 {
 	@FXML private Button abbrechenButton;
 	@FXML private ComboBox<String> dropdown;
@@ -33,9 +31,14 @@ public class ProjektFensterController implements EventHandler<WindowEvent>
 	private UserInterfaceController controller;
 	private Image icon;
 
-	public void init(UserInterfaceController controller, String savePath, Image icon)
+	public void init(UserInterfaceController controller, Stage stage, String savePath, Image icon)
 	{
 		this.controller = controller;
+		this.stage = stage;
+		this.stage.setOnCloseRequest((handle)-> {
+			controller.projektExistiertFlag = false;
+	        stage.close();		  
+        });
 		this.icon = icon;
 
 		ArrayList<String> objects = new ArrayList<String>();
@@ -85,19 +88,6 @@ public class ProjektFensterController implements EventHandler<WindowEvent>
 		});
 	}
 
-	@Override
-	public void handle(WindowEvent arg0)
-	{
-		controller.projektExistiertFlag = false;
-		stage.close();
-	}
-
-	public void setStage(Stage s)
-	{
-		stage = s;
-		stage.setOnCloseRequest(this);
-	}
-
 	public void okButton(ActionEvent e)
 	{
 		String project = dropdown.getValue();
@@ -109,7 +99,7 @@ public class ProjektFensterController implements EventHandler<WindowEvent>
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warnung");
 			alert.setHeaderText("");
-			alert.setContentText("Die Felder dürfen nicht leer sein.");
+			alert.setContentText("Die Felder dÃ¼rfen nicht leer sein.");
 			alert.initOwner(stage);
 			Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 			dialogStage.getIcons().add(icon);
