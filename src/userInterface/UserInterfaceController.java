@@ -75,6 +75,7 @@ public class UserInterfaceController
 	@FXML private ToggleButton startButton;
 	@FXML private TableView<LogObject> table;
 	@FXML private ScrollPane scrollPane;
+	@FXML private Label labelSeparator;
 
 	private Stage stage;
 	private core.Counter stoppUhr;
@@ -96,6 +97,9 @@ public class UserInterfaceController
 	public void init(Stage stage)
 	{		
 	    this.stage = stage;
+	    
+	    labelSeparator.setStyle("-fx-background-color: #cdc6c6; -fx-font-size: 0.7");
+//	    labelSeparator.setMaxHeight(1.5);
 	    
 		PathUtils.checkFolder(new File(new File(savePath).getParent()));
 		icon = new Image("/userInterface/icon.png");
