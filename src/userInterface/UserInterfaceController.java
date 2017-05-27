@@ -17,6 +17,8 @@ import core.Exporter;
 import core.Importer;
 import core.LogObject;
 import core.SQL;
+import core.Settings;
+import core.Utils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -93,13 +95,13 @@ public class UserInterfaceController
 	private Stage waitingStage = new Stage();
 	private Image icon;
 	private final ResourceBundle bundle = ResourceBundle.getBundle("userInterface/", Locale.GERMANY);
+	private Settings settings;
 
 	public void init(Stage stage)
 	{		
 	    this.stage = stage;
 	    
 	    labelSeparator.setStyle("-fx-background-color: #cdc6c6; -fx-font-size: 0.7");
-//	    labelSeparator.setMaxHeight(1.5);
 	    
 		PathUtils.checkFolder(new File(new File(savePath).getParent()));
 		icon = new Image("/userInterface/icon.png");
@@ -151,6 +153,8 @@ public class UserInterfaceController
 				startButton.setSelected(false);
 			}
 		});
+		
+		loadSettings();
 	}
 
 	/**
@@ -192,7 +196,7 @@ public class UserInterfaceController
 				newStage.getIcons().add(icon);
 
 				ProjektFensterController pfc = (ProjektFensterController)fxmlLoader.getController();
-				pfc.init(this, stage, savePath, icon);
+				pfc.init(this, newStage, savePath, icon);
 
 				newStage.setResizable(false);
 				newStage.initModality(Modality.APPLICATION_MODAL);
@@ -439,7 +443,7 @@ public class UserInterfaceController
 			newStage.setScene(scene);
 			newStage.setTitle("Diagramme");
 			ChartGUIController controller = (ChartGUIController)fxmlLoader.getController();
-			controller.init(savePath, stage, icon);
+			controller.init(savePath, newStage, icon);
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
@@ -467,6 +471,9 @@ public class UserInterfaceController
 		log = new LogObject();
 		log.setProject(project);
 		log.setTask(task);
+		settings.setLastProject(project);
+		settings.setLastTask(task);
+		saveSettings();
 	}
 
 	private void startClock()
@@ -520,7 +527,7 @@ public class UserInterfaceController
 			newStage.setTitle("Zeit nachträglich einfügen");
 
 			InsertTimeController controller = (InsertTimeController)fxmlLoader.getController();
-			controller.init(stage, this, savePath, icon);
+			controller.init(newStage, this, savePath, icon);
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
@@ -719,7 +726,7 @@ public class UserInterfaceController
 			newStage.initOwner(stage);
 
 			EditController pfc = (EditController)fxmlLoader.getController();			
-			pfc.init(this, stage, savePath, icon, object);
+			pfc.init(this, newStage, savePath, icon, object);
 
 			newStage.setResizable(false);
 			newStage.initModality(Modality.APPLICATION_MODAL);
@@ -784,7 +791,34 @@ public class UserInterfaceController
 			}			
 		}		
 	}
-
+	
+	public void saveSettings()
+	{
+		try
+		{
+			Utils.saveSettings(settings);
+		}
+		catch(IOException e)
+		{
+			Logger.error(e);
+		}
+	}
+	
+	public void loadSettings()
+	{
+		settings = Utils.loadSettings();
+		if(settings != null)
+		{
+			setLabels(settings.getLastProject(), settings.getLastTask());
+			projektExistiertFlag = true;
+			newProject(settings.getLastProject(), settings.getLastTask());
+		}
+		else
+		{
+			settings = new Settings();
+		}
+	}
+	
 	public void about()
 	{
 		AlertGenerator.showAboutAlert(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", icon, stage, null, false);		
