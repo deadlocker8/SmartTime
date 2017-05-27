@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +29,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import logger.Logger;
 import tools.AlertGenerator;
+import tools.ConvertTo;
 
 public class InsertTimeController 
 {
@@ -369,9 +369,7 @@ public class InsertTimeController
 		
 		int hours2 = timePicker2Controller.getHours();
 		int minutes2 = timePicker2Controller.getMinutes();
-		int seconds2 = timePicker2Controller.getSeconds();
-		
-		int days = Period.between(datePicker1.getValue(), datePicker2.getValue()).getDays();
+		int seconds2 = timePicker2Controller.getSeconds();		
 		
 		String dateString = datePicker1.getValue().getYear() + "-" + getCorrectedString(datePicker1.getValue().getMonthValue()) + "-" + getCorrectedString(datePicker1.getValue().getDayOfMonth()) + "-" + getCorrectedString(hours1) + ":" + getCorrectedString(minutes1) + ":" + getCorrectedString(seconds1);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
@@ -381,14 +379,8 @@ public class InsertTimeController
 		LocalDateTime dateTime2 = LocalDateTime.parse(dateString, formatter);
 		
 		Duration d= Duration.between(dateTime, dateTime2);
-
-		long seconds = d.getSeconds();		
 		
-		int finalHours = 24 * days + (int)(seconds / (60 * 60)) % 24;
-		int finalMinutes = (int)seconds / 60 % 60;;
-		int finalSeconds = (int)seconds % 60;		
-		
-		labelDuration.setText("" + finalHours + " h " + finalMinutes + " min " + finalSeconds + " sek");		
+		labelDuration.setText(ConvertTo.ConvertSecondsToTime(d.getSeconds()));		
 	}
 	
 	public boolean isEndDateAfterStartDate()
