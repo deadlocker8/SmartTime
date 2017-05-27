@@ -821,6 +821,8 @@ public class UserInterfaceController
 	
 	public void about()
 	{
-		AlertGenerator.showAboutAlert(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", icon, stage, null, false);		
+		ArrayList<String> creditLines = new ArrayList<>();
+		creditLines.add(bundle.getString("credits"));
+		AlertGenerator.showAboutAlertWithCredits(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", creditLines, icon, stage, null, false);		
 	}	
 }
