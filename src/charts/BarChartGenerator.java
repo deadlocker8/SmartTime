@@ -57,7 +57,7 @@ public class BarChartGenerator
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		final BarChart<String, Number> chart = new BarChart<String, Number>(xAxis, yAxis);
-		chart.setTitle(project + " - " + task + " - " + Utils.getMonthName(month) + " " + year);
+		chart.setTitle(project + " - " + task + " - " + Utils.getMonthName(month - 1) + " " + year);
 		xAxis.setLabel("Tag");
 		yAxis.setLabel("Zeit in Minuten");
 		chart.setCategoryGap(2);

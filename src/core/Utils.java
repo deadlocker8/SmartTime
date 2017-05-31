@@ -23,7 +23,7 @@ public class Utils
 
     public static String getMonthName(int monthNumberOneIndexed)
     {
-        return AVAILABLE_MONTH_NAMES[monthNumberOneIndexed - 1];
+        return AVAILABLE_MONTH_NAMES[monthNumberOneIndexed];
     }    
     
     public static int getMonthNumber(String monthName)

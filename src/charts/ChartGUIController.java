@@ -467,37 +467,35 @@ public class ChartGUIController
 	
 	private ArrayList<String> getTasks(ArrayList<LogObject> objects)
 	{
-		HashSet<String> tasks2 = new HashSet<String>();
+		HashSet<String> tasks = new HashSet<String>();
 		for(LogObject current : objects)
 		{
-			tasks2.add(String.valueOf(current.getTask()));
+			tasks.add(String.valueOf(current.getTask()));
 		}
-		return new ArrayList<String>(tasks2);
+		return new ArrayList<String>(tasks);
 	}
 
 	private ArrayList<String> getYears(ArrayList<LogObject> objects)
 	{
-		HashSet<String> years2 = new HashSet<String>();
+		HashSet<String> years = new HashSet<String>();
 		for(LogObject current : objects)
 		{
-			years2.add(String.valueOf(current.getYear()));
+			years.add(String.valueOf(current.getYear()));
 		}
-		return new ArrayList<String>(years2);
+		return new ArrayList<String>(years);
 	}
 
 	private ArrayList<String> getMonths(ArrayList<LogObject> objects)
 	{
-		HashSet<Integer> months2 = new HashSet<Integer>();
+		HashSet<Integer> months = new HashSet<Integer>();
 		for(LogObject current : objects)
 		{
-			months2.add(current.getMonth());
+			months.add(current.getMonth());
 		}
-
-		ArrayList<Integer> monthsList = new ArrayList<Integer>(months2);
 
 		ArrayList<String> monthNames = new ArrayList<String>();		
 
-		for(int k = 0; k < monthsList.size(); k++)
+		for(int k = 0; k <  new ArrayList<Integer>(months).size(); k++)
 		{
 		    monthNames.add(Utils.getMonthName(k));
 		}

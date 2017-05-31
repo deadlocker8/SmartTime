@@ -157,15 +157,19 @@ public class SQL
 	public ArrayList<LogObject> getByProjectAndTaskAndYear(String projectName, String taskName, int year) throws Exception
 	{
 		Connection c = null;
-		Statement stmt = null;
-
 		Class.forName("org.sqlite.JDBC");
 		c = DriverManager.getConnection("jdbc:sqlite:" + path);
-		c.setAutoCommit(false);
+		c.setAutoCommit(false); 
+		
+		String sql = "SELECT * FROM SMARTTIME WHERE PROJECT= ? AND TASK= ? AND YEAR= ? ORDER BY MONTH DESC, DAY DESC, STARTTIME DESC;";
 
-		stmt = c.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM SMARTTIME WHERE PROJECT='" + projectName + "' AND TASK='" + taskName + "' AND YEAR='" + year + "'ORDER BY MONTH DESC, DAY DESC, STARTTIME DESC;");
-
+		PreparedStatement stmt = c.prepareStatement(sql);
+		stmt.setString(1, projectName);
+		stmt.setString(2, taskName);
+		stmt.setInt(3, year);
+		
+		ResultSet rs = stmt.executeQuery();		
+		
 		ArrayList<LogObject> logObjects = extractLogObjects(rs);
 
 		rs.close();
@@ -178,15 +182,19 @@ public class SQL
 	public ArrayList<LogObject> getByProjectAndTaskAndYearAndMonth(String projectName, String taskName, int year, int month) throws Exception
 	{
 		Connection c = null;
-		Statement stmt = null;
-
 		Class.forName("org.sqlite.JDBC");
 		c = DriverManager.getConnection("jdbc:sqlite:" + path);
 		c.setAutoCommit(false);
-
-		stmt = c.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM SMARTTIME WHERE PROJECT='" + projectName + "' AND TASK='" + taskName + "' AND YEAR='" + year + "' AND MONTH='" + month + "'ORDER BY DAY DESC, STARTTIME DESC;");
-
+		
+		String sql = "SELECT * FROM SMARTTIME WHERE PROJECT= ? AND TASK= ? AND YEAR= ? AND MONTH= ? ORDER BY DAY DESC, STARTTIME DESC;";
+		PreparedStatement stmt = c.prepareStatement(sql);
+		stmt.setString(1, projectName);
+		stmt.setString(2, taskName);
+		stmt.setInt(3, year);
+		stmt.setInt(4, month);
+		
+		ResultSet rs = stmt.executeQuery();
+		
 		ArrayList<LogObject> logObjects = extractLogObjects(rs);
 
 		rs.close();
@@ -198,16 +206,19 @@ public class SQL
 
 	public ArrayList<LogObject> getByProjectAndYear(String projectName, int year) throws Exception
 	{
-		Connection c = null;
-		Statement stmt = null;
+		Connection c = null;		
 
 		Class.forName("org.sqlite.JDBC");
 		c = DriverManager.getConnection("jdbc:sqlite:" + path);
 		c.setAutoCommit(false);
-
-		stmt = c.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM SMARTTIME WHERE PROJECT='" + projectName + "' AND YEAR='" + year + "'ORDER BY MONTH DESC, DAY DESC, STARTTIME DESC;");
-
+		
+		String sql = "SELECT * FROM SMARTTIME WHERE PROJECT= ? AND YEAR= ? ORDER BY MONTH DESC, DAY DESC, STARTTIME DESC;";
+		PreparedStatement stmt = c.prepareStatement(sql);
+		stmt.setString(1, projectName);
+		stmt.setInt(2, year);
+		
+		ResultSet rs = stmt.executeQuery();
+		
 		ArrayList<LogObject> logObjects = extractLogObjects(rs);
 
 		rs.close();
@@ -220,15 +231,19 @@ public class SQL
 	public ArrayList<LogObject> getByProjectAndYearAndMonth(String projectName, int year, int month) throws Exception
 	{
 		Connection c = null;
-		Statement stmt = null;
-
 		Class.forName("org.sqlite.JDBC");
 		c = DriverManager.getConnection("jdbc:sqlite:" + path);
 		c.setAutoCommit(false);
 
-		stmt = c.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM SMARTTIME WHERE PROJECT='" + projectName + "' AND YEAR='" + year + "' AND MONTH='" + month + "'ORDER BY DAY DESC, STARTTIME DESC;");
+		String sql = "SELECT * FROM SMARTTIME WHERE PROJECT= ? AND YEAR= ? AND MONTH= ? ORDER BY DAY DESC, STARTTIME DESC;";
 
+		PreparedStatement stmt = c.prepareStatement(sql);
+		stmt.setString(1, projectName);
+		stmt.setInt(2, year);
+		stmt.setInt(3, month);
+		
+		ResultSet rs = stmt.executeQuery();
+		
 		ArrayList<LogObject> logObjects = extractLogObjects(rs);
 
 		rs.close();
@@ -241,15 +256,17 @@ public class SQL
 	public ArrayList<LogObject> getByYear(int year) throws Exception
 	{
 		Connection c = null;
-		Statement stmt = null;
-
 		Class.forName("org.sqlite.JDBC");
 		c = DriverManager.getConnection("jdbc:sqlite:" + path);
 		c.setAutoCommit(false);
 
-		stmt = c.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM SMARTTIME WHERE YEAR='" + year + "' ORDER BY PROJECT, TASK");
+		String sql = "SELECT * FROM SMARTTIME WHERE YEAR= ? ORDER BY PROJECT, TASK;";
 
+		PreparedStatement stmt = c.prepareStatement(sql);	
+		stmt.setInt(1, year);
+		
+		ResultSet rs = stmt.executeQuery();
+		
 		ArrayList<LogObject> logObjects = extractLogObjects(rs);
 
 		rs.close();
@@ -262,15 +279,18 @@ public class SQL
 	public ArrayList<LogObject> getByYearAndMonth(int year, int month) throws Exception
 	{
 		Connection c = null;
-		Statement stmt = null;
-
 		Class.forName("org.sqlite.JDBC");
 		c = DriverManager.getConnection("jdbc:sqlite:" + path);
 		c.setAutoCommit(false);
+		
+		String sql = "SELECT * FROM SMARTTIME WHERE YEAR= ? AND MONTH= ? ORDER BY PROJECT, TASK;";
 
-		stmt = c.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM SMARTTIME WHERE YEAR='" + year + "' AND MONTH='" + month + "'ORDER BY PROJECT, TASK;");
-
+		PreparedStatement stmt = c.prepareStatement(sql);	
+		stmt.setInt(1, year);
+		stmt.setInt(2, month);
+		
+		ResultSet rs = stmt.executeQuery();
+		
 		ArrayList<LogObject> logObjects = extractLogObjects(rs);
 
 		rs.close();
@@ -333,15 +353,25 @@ public class SQL
 
 	public void update(LogObject oldLog, LogObject newLog) throws Exception
 	{
-		Connection c = null;
-		Statement stmt = null;
+		Connection c = null;		
 		Class.forName("org.sqlite.JDBC");
 		c = DriverManager.getConnection("jdbc:sqlite:" + path);
-
-		stmt = c.createStatement();
-		String sql = "UPDATE SMARTTIME SET PROJECT='" + newLog.getProject() + "' , TASK='" + newLog.getTask() + "' " + "WHERE YEAR='" + oldLog.getYear() + "' AND MONTH='" + oldLog.getMonth() + "' AND DAY='" + oldLog.getDay() + "' AND STARTTIME='" + oldLog.getStartTime() + "' AND ENDTIME='"
-				+ oldLog.getEndTime() + "' AND DURATION='" + oldLog.getDuration() + "' AND PROJECT='" + oldLog.getProject() + "' AND TASK='" + oldLog.getTask() + "';";
-		stmt.executeUpdate(sql);
+		
+		String sql = "UPDATE SMARTTIME SET PROJECT= ? , TASK= ? WHERE YEAR= ? AND MONTH= ? AND DAY= ? AND STARTTIME= ? AND ENDTIME= ? AND DURATION= ? AND PROJECT= ? AND TASK= ?;";
+		
+		PreparedStatement stmt = c.prepareStatement(sql);
+		stmt.setString(1, newLog.getProject());
+		stmt.setString(2, newLog.getTask());
+		stmt.setInt(3, oldLog.getYear());
+		stmt.setInt(4, oldLog.getMonth());
+		stmt.setInt(5, oldLog.getDay());
+		stmt.setString(6, oldLog.getStartTime());
+		stmt.setString(7, oldLog.getEndTime());
+		stmt.setLong(8, oldLog.getDuration());
+		stmt.setString(9, oldLog.getProject());
+		stmt.setString(10, oldLog.getTask());
+		
+		stmt.executeUpdate();
 		stmt.close();
 
 		c.close();
@@ -350,14 +380,22 @@ public class SQL
 	public void delete(LogObject log) throws Exception
 	{
 		Connection c = null;
-		Statement stmt = null;
 		Class.forName("org.sqlite.JDBC");
 		c = DriverManager.getConnection("jdbc:sqlite:" + path);
-
-		stmt = c.createStatement();
-		String sql = "DELETE FROM SMARTTIME " + "WHERE YEAR='" + log.getYear() + "' AND MONTH='" + log.getMonth() + "' AND DAY='" + log.getDay() + "' AND STARTTIME='" + log.getStartTime() + "' AND ENDTIME='" + log.getEndTime() + "' AND DURATION='" + log.getDuration() + "' AND PROJECT='"
-				+ log.getProject() + "' AND TASK='" + log.getTask() + "';";
-		stmt.executeUpdate(sql);
+		
+		String sql = "DELETE FROM SMARTTIME " + "WHERE YEAR= ? AND MONTH= ? AND DAY= ? AND STARTTIME= ? AND ENDTIME= ? AND DURATION= ? AND PROJECT= ? AND TASK= ?;";
+	
+		PreparedStatement stmt = c.prepareStatement(sql);		
+		stmt.setInt(1, log.getYear());
+		stmt.setInt(2, log.getMonth());
+		stmt.setInt(3, log.getDay());
+		stmt.setString(4, log.getStartTime());
+		stmt.setString(5, log.getEndTime());
+		stmt.setLong(6, log.getDuration());
+		stmt.setString(7, log.getProject());
+		stmt.setString(8, log.getTask());
+		
+		stmt.execute();
 		stmt.close();
 
 		c.close();
