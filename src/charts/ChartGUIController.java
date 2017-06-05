@@ -220,11 +220,11 @@ public class ChartGUIController
 							else
 							{
 								try
-								{								
+								{									
 									months = getMonths(sql.getLogObjects());
 									monthBox.getItems().clear();
 									monthBox.getItems().add("Alle Monate");
-									monthBox.getItems().addAll(months);
+									monthBox.getItems().addAll(months);									
 									monthBox.getSelectionModel().select(0);
 
 									showPieChart(generator.getChart0010(Integer.parseInt(selectedYear), "Alle Projekte - " + selectedYear));
@@ -493,11 +493,12 @@ public class ChartGUIController
 			months.add(current.getMonth());
 		}
 
-		ArrayList<String> monthNames = new ArrayList<String>();		
+		ArrayList<String> monthNames = new ArrayList<String>();
+		ArrayList<Integer> monthsNumbers = new ArrayList<>(months);
 
-		for(int k = 0; k <  new ArrayList<Integer>(months).size(); k++)
-		{
-		    monthNames.add(Utils.getMonthName(k));
+		for(int k = 0; k < monthsNumbers.size(); k++)
+		{			
+		    monthNames.add(Utils.getMonthName(monthsNumbers.get(k)-1));
 		}
 
 		return monthNames;
