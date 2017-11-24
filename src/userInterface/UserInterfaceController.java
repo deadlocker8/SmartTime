@@ -112,6 +112,7 @@ public class UserInterfaceController
 
 		labelTime.setText("0 h  0  min  0 sek");		
 
+		createLogView();
 		loadAll();
 
 		// verwaltet den Start/Stopp-Button
@@ -195,7 +196,7 @@ public class UserInterfaceController
 			}
 			catch(IOException d)
 			{
-				d.printStackTrace();
+				Logger.error(d);
 			}
 		}
 		else
@@ -302,10 +303,17 @@ public class UserInterfaceController
 			}
 			catch(Exception ex)
 			{
-				ex.printStackTrace();
+				Logger.error(ex);
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Erstellen der Datenbank.", icon, stage, null, false);
 			}
 		}
+	}
+	
+	private void updateTableView()
+	{
+		table.getItems().clear();
+		ObservableList<LogObject> objectsForTable = FXCollections.observableArrayList(logObjects);
+		table.setItems(objectsForTable);
 	}
 
 	private void createLogView()
@@ -387,8 +395,6 @@ public class UserInterfaceController
 		table.getColumns().add(tasks);
 		table.getColumns().add(durations);
 
-		ObservableList<LogObject> objectsForTable = FXCollections.observableArrayList(logObjects);
-		table.setItems(objectsForTable);
 		table.setFixedCellSize(26);
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -453,7 +459,7 @@ public class UserInterfaceController
 	public void loadAll()
 	{
 		loadFromDB();
-		createLogView();
+		updateTableView();
 		createTreeView();	
 	}
 
@@ -723,7 +729,7 @@ public class UserInterfaceController
 		}
 		catch(IOException d)
 		{
-			d.printStackTrace();
+			Logger.error(d);
 		}
 	}
 	
