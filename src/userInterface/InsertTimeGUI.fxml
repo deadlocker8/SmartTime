@@ -5,9 +5,10 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.InsertTimeController">
+<AnchorPane prefHeight="400.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.InsertTimeController">
    <children>
       <Label layoutX="35.0" layoutY="128.0" text="Startdatum:">
          <font>
@@ -30,11 +31,16 @@
             <fx:include fx:id="timePicker2" source="TimePicker.fxml" />
          </children>
       </AnchorPane>
-      <Label layoutX="321.0" layoutY="218.0" text="Endzeit:">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
+      <VBox alignment="TOP_CENTER" layoutX="321.0" layoutY="218.0" spacing="3.0">
+         <children>
+            <Label text="Endzeit:">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="buttonUseCurrentTime" mnemonicParsing="false" onAction="#useCurrentTime" />
+         </children>
+      </VBox>
       <DatePicker fx:id="datePicker2" layoutX="154.0" layoutY="219.0" prefHeight="25.0" prefWidth="134.0" />
       <Label layoutX="48.0" layoutY="218.0" text="Enddatum:">
          <font>

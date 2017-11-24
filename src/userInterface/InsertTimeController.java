@@ -14,6 +14,8 @@ import java.util.Date;
 
 import core.LogObject;
 import core.SQL;
+import fontAwesome.FontIcon;
+import fontAwesome.FontIconType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -25,6 +27,7 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import logger.Logger;
@@ -33,17 +36,18 @@ import tools.ConvertTo;
 
 public class InsertTimeController 
 {
-	@FXML DatePicker datePicker1;
-	@FXML DatePicker datePicker2;
-	@FXML Parent timePicker1;
-	@FXML TimePickerController timePicker1Controller;	
-	@FXML Parent timePicker2;
-	@FXML TimePickerController timePicker2Controller;	
-	@FXML Button buttonAdd;
-	@FXML Button buttonCancel;	
-	@FXML Label labelDuration;	
-	@FXML ComboBox<String> comboBoxProject;
-	@FXML ComboBox<String> comboBoxTask;
+	@FXML private DatePicker datePicker1;
+	@FXML private DatePicker datePicker2;
+	@FXML private Parent timePicker1;
+	@FXML private TimePickerController timePicker1Controller;	
+	@FXML private Parent timePicker2;
+	@FXML private TimePickerController timePicker2Controller;	
+	@FXML private Button buttonUseCurrentTime;
+	@FXML private Button buttonAdd;
+	@FXML private Button buttonCancel;
+	@FXML private Label labelDuration;	
+	@FXML private ComboBox<String> comboBoxProject;
+	@FXML private ComboBox<String> comboBoxTask;
 	
 	private Stage stage;
 	private UserInterfaceController controller;
@@ -55,7 +59,9 @@ public class InsertTimeController
 		this.savePath = savePath;
 		this.stage = stage;
 		this.controller = controller;		
-		this.icon = icon;	
+		this.icon = icon;
+		
+		buttonUseCurrentTime.setGraphic(new FontIcon(FontIconType.CLOCK_ALT, 14, Color.BLACK));
 		
 		ArrayList<String> objects = new ArrayList<String>();
 		
@@ -159,12 +165,13 @@ public class InsertTimeController
 		comboBoxProject.requestFocus();		
 	}
 	
+	@FXML
 	public void buttonAdd()
 	{
 		String project = comboBoxProject.getValue();		
 		String task = comboBoxTask.getValue(); 	
 		
-		if(!project.equals("") && !task.equals(""))
+		if(project != null && !project.equals("") && task != null && !task.equals(""))
 		{	
 			if(isEndDateAfterStartDate())
 			{
@@ -219,9 +226,19 @@ public class InsertTimeController
 		}
 	}
 	
+	@FXML
 	public void buttonCancel()
 	{
 		stage.close();
+	}
+	
+	@FXML
+	public void useCurrentTime()
+	{
+		LocalDateTime now = LocalDateTime.now();
+		timePicker2Controller.setTime(now.getHour(), now.getMinute(), now.getSecond());	
+		timePicker2Controller.init();
+		setLabelDuration();
 	}
 	
 	public void refresh(TimePickerController controller, int hours, int minutes, int seconds, String item, String direction)
@@ -286,7 +303,7 @@ public class InsertTimeController
 				}
 			}			
 			timePicker1Controller.setTime(hours, minutes, seconds);
-			timePicker1Controller.init();			
+			timePicker1Controller.init();	
 		}
 		else
 		{
