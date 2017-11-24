@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.UserInterfaceController">
+<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.UserInterfaceController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="143.0" layoutY="69.0" prefHeight="800.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -25,6 +25,7 @@
                 <Menu mnemonicParsing="false" text="Datei">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#insertTime" text="Zeit nachträglich einfügen" />
+                        <MenuItem mnemonicParsing="false" onAction="#changeSavePath" text="Speicherort ändern" />
                         <MenuItem mnemonicParsing="false" onAction="#deleteDB" text="Datenbank löschen" />
                      </items></Menu>
                   <Menu mnemonicParsing="false" text="Import">
@@ -88,7 +89,7 @@
                   </Button>
                </children>
                <VBox.margin>
-                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                  <Insets bottom="30.0" left="30.0" right="30.0" top="20.0" />
                </VBox.margin>
             </HBox>
             <HBox>
@@ -151,6 +152,19 @@
                 </TitledPane>
               </panes>
             </Accordion>
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label text="Speicherort der Datenbank:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labelSavePath" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+               </VBox.margin>
+            </HBox>
          </children>
       </VBox>
    </children>

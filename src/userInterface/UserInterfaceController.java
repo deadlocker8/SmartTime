@@ -55,6 +55,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -64,7 +65,6 @@ import logger.Logger;
 import tools.AlertGenerator;
 import tools.ConvertTo;
 import tools.PathUtils;
-
 
 public class UserInterfaceController
 {
@@ -79,6 +79,7 @@ public class UserInterfaceController
 	@FXML private TableView<LogObject> table;
 	@FXML private ScrollPane scrollPane;
 	@FXML private Label labelSeparator;
+	@FXML private Label labelSavePath;
 
 	private Stage stage;
 	private Timer timer;
@@ -89,8 +90,8 @@ public class UserInterfaceController
 	private long startTimestamp;
 	private long endTimestamp;
 	private int longestProject;
-	private ArrayList<LogObject> logObjects = new ArrayList<LogObject>();	
-	private final String savePath = PathUtils.getOSindependentPath() + "/Deadlocker/SmartTime/save.db";
+	private ArrayList<LogObject> logObjects = new ArrayList<LogObject>();
+	private final String DEFAULT_SAVE_PATH = PathUtils.getOSindependentPath() + "/Deadlocker/SmartTime/";
 	private SQL sql;
 	private Stage waitingStage = new Stage();
 	private Image icon;
@@ -98,50 +99,47 @@ public class UserInterfaceController
 	private Settings settings;
 
 	public void init(Stage stage)
-	{		
-	    this.stage = stage;
-	    
-	    labelSeparator.setStyle("-fx-background-color: #cdc6c6; -fx-font-size: 0.7");
-	    
-		PathUtils.checkFolder(new File(new File(savePath).getParent()));
+	{
+		this.stage = stage;
+
+		labelSeparator.setStyle("-fx-background-color: #cdc6c6; -fx-font-size: 0.7");
+		PathUtils.checkFolder(new File(DEFAULT_SAVE_PATH));
 		icon = new Image("/userInterface/icon.png");
-
 		accordion.setExpandedPane(gesamtesLog);
-
 		projektExistiertFlag = false;
+		labelTime.setText("0 h  0  min  0 sek");
 
-		labelTime.setText("0 h  0  min  0 sek");		
-
+		loadSettings();
 		createLogView();
 		loadAll();
+		
+		setLabelSavePath();
 
 		// verwaltet den Start/Stopp-Button
 		startButton.setOnAction(event -> {
-
 			if(projektExistiertFlag == true)
-
+			{
 				if(startButton.isSelected())
-				{					
+				{
 					startButton.setText("Stopp");
 					startClock();
 					timer = new Timer(labelTime);
 					timer.start();
 				}
 				else
-				{					
+				{
 					startButton.setText("Start");
 					timer.stop();
 					endClock();
 					loadAll();
 				}
+			}
 			else
 			{
 				AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Kein Projekt ausgewählt.", icon, stage, null, false);
 				startButton.setSelected(false);
 			}
 		});
-		
-		loadSettings();
 	}
 
 	/**
@@ -153,14 +151,14 @@ public class UserInterfaceController
 		// Prüft, ob die Stoppuhr noch läuft
 		if(isTimerRunning())
 		{
-			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Stoppuhr läuft noch!", icon, stage, null, false);			
+			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Stoppuhr läuft noch!", icon, stage, null, false);
 		}
 		else
 		{
 			stage.close();
 		}
 	}
-	
+
 	public boolean isTimerRunning()
 	{
 		return timer != null && timer.isRunning();
@@ -170,6 +168,14 @@ public class UserInterfaceController
 	{
 		aktuellesProjektAusgabe.setText(project);
 		aktuellerTaskAusgabe.setText(task);
+	}
+	
+	private void setLabelSavePath()
+	{
+		String savePathForLabel = settings.getSavePath() + "/" + Utils.DATABASE_NAME;
+		savePathForLabel = savePathForLabel.replace("\\", "/");
+		savePathForLabel = savePathForLabel.replaceAll("//", "/");
+		labelSavePath.setText(savePathForLabel);
 	}
 
 	public void openProjectGUI(ActionEvent e)
@@ -188,7 +194,7 @@ public class UserInterfaceController
 				newStage.getIcons().add(icon);
 
 				ProjektFensterController pfc = (ProjektFensterController)fxmlLoader.getController();
-				pfc.init(this, newStage, savePath, icon);
+				pfc.init(this, newStage, settings, icon);
 
 				newStage.setResizable(false);
 				newStage.initModality(Modality.APPLICATION_MODAL);
@@ -278,7 +284,7 @@ public class UserInterfaceController
 
 	private void loadFromDB()
 	{
-		sql = new SQL(savePath);
+		sql = new SQL(settings.getSavePath() + "/" + Utils.DATABASE_NAME);
 		try
 		{
 			logObjects = sql.getLogObjects();
@@ -308,7 +314,7 @@ public class UserInterfaceController
 			}
 		}
 	}
-	
+
 	private void updateTableView()
 	{
 		table.getItems().clear();
@@ -317,9 +323,9 @@ public class UserInterfaceController
 	}
 
 	private void createLogView()
-	{		
+	{
 		table.getItems().clear();
-		table.getColumns().clear();	
+		table.getColumns().clear();
 
 		TableColumn<LogObject, String> dates = new TableColumn<>("Datum");
 		dates.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LogObject, String>, ObservableValue<String>>()
@@ -416,13 +422,13 @@ public class UserInterfaceController
 					{
 						// clicking on text part
 						row = (TableRow<LogObject>)node.getParent();
-					}				
-					
+					}
+
 					editEntry(row.getItem());
 				}
 			}
 		});
-		
+
 		table.prefWidthProperty().bind(scrollPane.widthProperty().subtract(2));
 		table.prefHeightProperty().bind(scrollPane.heightProperty().subtract(2));
 	}
@@ -440,7 +446,7 @@ public class UserInterfaceController
 			newStage.setScene(scene);
 			newStage.setTitle("Diagramme");
 			ChartGUIController controller = (ChartGUIController)fxmlLoader.getController();
-			controller.init(savePath, newStage, icon);
+			controller.init(settings, newStage, icon);
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
@@ -460,7 +466,7 @@ public class UserInterfaceController
 	{
 		loadFromDB();
 		updateTableView();
-		createTreeView();	
+		createTreeView();
 	}
 
 	public void newProject(String project, String task)
@@ -485,7 +491,7 @@ public class UserInterfaceController
 		endTimestamp = System.currentTimeMillis();
 		log.setDuration(endTimestamp - startTimestamp);
 
-		SQL sql = new SQL(savePath);
+		SQL sql = new SQL(settings.getSavePath() + "/" + Utils.DATABASE_NAME);
 		try
 		{
 			sql.insert(log);
@@ -522,7 +528,7 @@ public class UserInterfaceController
 			newStage.setTitle("Zeit nachträglich einfügen");
 
 			InsertTimeController controller = (InsertTimeController)fxmlLoader.getController();
-			controller.init(newStage, this, savePath, icon);
+			controller.init(newStage, this, settings, icon);
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
@@ -552,7 +558,7 @@ public class UserInterfaceController
 					Platform.runLater(() -> {
 						showWaitingDialog("Importiere...", "Bitte warten...");
 					});
-					Importer importer = new Importer(savePath, stage, icon);
+					Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage, icon);
 					importer.importFromSmartTime(file);
 					Platform.runLater(() -> {
 						closeWaitingDialog();
@@ -580,7 +586,7 @@ public class UserInterfaceController
 					Platform.runLater(() -> {
 						showWaitingDialog("Importiere...", "Bitte warten...");
 					});
-					Importer importer = new Importer(savePath, stage, icon);
+					Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage, icon);
 					importer.importFromDB(file);
 					Platform.runLater(() -> {
 						closeWaitingDialog();
@@ -608,7 +614,7 @@ public class UserInterfaceController
 					Platform.runLater(() -> {
 						showWaitingDialog("Importiere...", "Bitte warten...");
 					});
-					Importer importer = new Importer(savePath, stage, icon);
+					Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage, icon);
 					importer.importFromJSON(file);
 					Platform.runLater(() -> {
 						closeWaitingDialog();
@@ -631,13 +637,13 @@ public class UserInterfaceController
 		{
 			try
 			{
-				Files.copy(new File(savePath).toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(new File(settings.getSavePath() + "/" + Utils.DATABASE_NAME).toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 			catch(IOException e)
 			{
 				Logger.error(e);
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
-			}			
+			}
 			AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "", "Export erfolgreich abgeschlossen.", icon, stage, null, false);
 		}
 	}
@@ -658,7 +664,7 @@ public class UserInterfaceController
 					Platform.runLater(() -> {
 						showWaitingDialog("Exportiere...", "Bitte warten...");
 					});
-					Exporter exporter = new Exporter(savePath, stage, icon);
+					Exporter exporter = new Exporter(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage, icon);
 					exporter.exportAsJSON(file);
 					Platform.runLater(() -> {
 						closeWaitingDialog();
@@ -707,7 +713,7 @@ public class UserInterfaceController
 			waitingStage.close();
 		}
 	}
-	
+
 	private void editEntry(LogObject object)
 	{
 		try
@@ -720,19 +726,19 @@ public class UserInterfaceController
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
-			EditController pfc = (EditController)fxmlLoader.getController();			
-			pfc.init(this, newStage, savePath, icon, object);
+			EditController pfc = (EditController)fxmlLoader.getController();
+			pfc.init(this, newStage, settings, icon, object);
 
 			newStage.setResizable(false);
 			newStage.initModality(Modality.APPLICATION_MODAL);
-			newStage.showAndWait();			
+			newStage.showAndWait();
 		}
 		catch(IOException d)
 		{
 			Logger.error(d);
 		}
 	}
-	
+
 	public void updateEntry(LogObject oldLog, LogObject newLog)
 	{
 		try
@@ -760,7 +766,43 @@ public class UserInterfaceController
 			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Löschen des Eintrags ist ein Fehler aufgetreten.", icon, stage, null, false);
 		}
 	}
-	
+
+	@FXML
+	public void changeSavePath()
+	{
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setTitle("Speicherort auswählen");
+		File file = directoryChooser.showDialog(stage);
+		if(file != null)
+		{
+			String oldSavePath = settings.getSavePath();
+			settings.setSavePath(file.getAbsolutePath());
+			saveSettings();
+			if(!oldSavePath.equals(settings.getSavePath()))
+			{
+				if(new File(oldSavePath + "/" + Utils.DATABASE_NAME).exists())
+				{
+					try
+					{
+						Files.move(new File(oldSavePath + "/" + Utils.DATABASE_NAME).toPath(), new File(settings.getSavePath() + "/" + Utils.DATABASE_NAME).toPath(), StandardCopyOption.REPLACE_EXISTING);
+					}
+					catch(IOException e)
+					{
+						Logger.error(e);
+						AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Verschieben der Datenbank ist ein Fehler aufgetreten", icon, stage, null, false);
+					}
+				}
+				else
+				{
+					loadFromDB();
+					loadAll();
+				}
+			}
+			setLabelSavePath();
+		}
+	}
+
+	@FXML
 	public void deleteDB()
 	{
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -769,7 +811,7 @@ public class UserInterfaceController
 		alert.setContentText("Möchten Sie die gesamte Datenbank wirklich unwiederruflich löschen?");
 		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(icon);
-		
+
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK)
 		{
@@ -783,10 +825,10 @@ public class UserInterfaceController
 			{
 				Logger.error(e);
 				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Löschen der Datenbank ist ein Fehler aufgetreten.", icon, stage, null, false);
-			}			
-		}		
+			}
+		}
 	}
-	
+
 	public void saveSettings()
 	{
 		try
@@ -798,7 +840,7 @@ public class UserInterfaceController
 			Logger.error(e);
 		}
 	}
-	
+
 	public void loadSettings()
 	{
 		settings = Utils.loadSettings();
@@ -811,13 +853,14 @@ public class UserInterfaceController
 		else
 		{
 			settings = new Settings();
+			settings.setSavePath(DEFAULT_SAVE_PATH);
 		}
 	}
-	
+
 	public void about()
 	{
 		ArrayList<String> creditLines = new ArrayList<>();
 		creditLines.add(bundle.getString("credits"));
-		AlertGenerator.showAboutAlertWithCredits(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", creditLines, icon, stage, null, false);		
-	}	
+		AlertGenerator.showAboutAlertWithCredits(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", creditLines, icon, stage, null, false);
+	}
 }

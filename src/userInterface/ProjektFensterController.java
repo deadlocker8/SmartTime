@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import core.SQL;
+import core.Settings;
+import core.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -31,7 +33,7 @@ public class ProjektFensterController
 	private UserInterfaceController controller;
 	private Image icon;
 
-	public void init(UserInterfaceController controller, Stage stage, String savePath, Image icon)
+	public void init(UserInterfaceController controller, Stage stage, Settings settings, Image icon)
 	{
 		this.controller = controller;
 		this.stage = stage;
@@ -43,7 +45,7 @@ public class ProjektFensterController
 
 		ArrayList<String> objects = new ArrayList<String>();
 
-		SQL sql = new SQL(savePath);
+		SQL sql = new SQL(settings.getSavePath() + "/" + Utils.DATABASE_NAME);
 		try
 		{
 			objects = sql.getProjectNames();

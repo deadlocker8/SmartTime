@@ -2,18 +2,30 @@ package core;
 
 public class Settings
 {
+	private String savePath;
 	private String lastProject;
 	private String lastTask;
-	
+
 	public Settings()
 	{
-		
+
 	}
 
-	public Settings(String lastProject, String lastTask)
+	public Settings(String savePath, String lastProject, String lastTask)
 	{
+		this.savePath = savePath;
 		this.lastProject = lastProject;
 		this.lastTask = lastTask;
+	}
+
+	public String getSavePath()
+	{
+		return savePath;
+	}
+
+	public void setSavePath(String savePath)
+	{
+		this.savePath = savePath;
 	}
 
 	public String getLastProject()
@@ -39,6 +51,6 @@ public class Settings
 	@Override
 	public String toString()
 	{
-		return "Settings [lastProject=" + lastProject + ", lastTask=" + lastTask + "]";
+		return "Settings [savePath=" + savePath + ", lastProject=" + lastProject + ", lastTask=" + lastTask + "]";
 	}
 }

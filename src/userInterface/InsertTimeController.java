@@ -14,6 +14,8 @@ import java.util.Date;
 
 import core.LogObject;
 import core.SQL;
+import core.Settings;
+import core.Utils;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
 import javafx.beans.value.ChangeListener;
@@ -54,9 +56,9 @@ public class InsertTimeController
 	private String savePath;
 	private Image icon;
 	
-	public void init(Stage stage, UserInterfaceController controller, String savePath, Image icon)
+	public void init(Stage stage, UserInterfaceController controller, Settings settings, Image icon)
 	{	
-		this.savePath = savePath;
+		this.savePath = settings.getSavePath() + "/" + Utils.DATABASE_NAME;
 		this.stage = stage;
 		this.controller = controller;		
 		this.icon = icon;

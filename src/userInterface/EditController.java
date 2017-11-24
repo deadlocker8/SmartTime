@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import core.LogObject;
 import core.SQL;
+import core.Settings;
+import core.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -30,7 +32,7 @@ public class EditController
 	private Image icon;
 	private LogObject object;
 
-	public void init(UserInterfaceController controller, Stage stage, String savePath, Image icon, LogObject object)
+	public void init(UserInterfaceController controller, Stage stage, Settings settings, Image icon, LogObject object)
 	{
 		this.controller = controller;
 		this.stage = stage;
@@ -39,7 +41,7 @@ public class EditController
 
 		ArrayList<String> objects = new ArrayList<String>();
 
-		SQL sql = new SQL(savePath);
+		SQL sql = new SQL(settings.getSavePath() + "/" + Utils.DATABASE_NAME);
 		try
 		{
 			objects = sql.getProjectNames();

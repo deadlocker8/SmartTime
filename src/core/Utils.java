@@ -20,6 +20,8 @@ public class Utils
 	private static final ResourceBundle bundle = ResourceBundle.getBundle("userInterface/", Locale.GERMANY);
 	
     private static final String[] AVAILABLE_MONTH_NAMES = {"Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"};
+    
+    public static final String DATABASE_NAME = "SmartTime.db";
 
     public static String getMonthName(int monthNumberOneIndexed)
     {

@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import core.LogObject;
 import core.SQL;
+import core.Settings;
 import core.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -42,12 +43,13 @@ public class ChartGUIController
 	private SummaryGenerator summaryGenerator;
 	private BarChartGenerator barChartGenertator;	
 	
-	public void init(String savePath, Stage stage, Image icon)
+	public void init(Settings settings, Stage stage, Image icon)
 	{
 		try
 		{
 		    this.stage = stage;
 			this.icon = icon;
+			String savePath = settings.getSavePath() + "/" + Utils.DATABASE_NAME;
 			sql = new SQL(savePath);
 
 			ArrayList<String> projects = new ArrayList<String>();
