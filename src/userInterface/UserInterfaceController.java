@@ -18,6 +18,7 @@ import core.Importer;
 import core.LogObject;
 import core.SQL;
 import core.Settings;
+import core.Timer;
 import core.Utils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -80,8 +81,7 @@ public class UserInterfaceController
 	@FXML private Label labelSeparator;
 
 	private Stage stage;
-	private core.Counter stoppUhr;
-	public boolean stoppUhrLäuftFlag;
+	private Timer timer;
 	public boolean projektExistiertFlag;
 	private ArrayList<TreeItem<HBox>> aktuelleTasks;
 	private TreeItem<HBox> item;
@@ -109,7 +109,6 @@ public class UserInterfaceController
 		accordion.setExpandedPane(gesamtesLog);
 
 		projektExistiertFlag = false;
-		stoppUhrLäuftFlag = false;
 
 		labelTime.setText("0 h  0  min  0 sek");		
 
@@ -121,30 +120,17 @@ public class UserInterfaceController
 			if(projektExistiertFlag == true)
 
 				if(startButton.isSelected())
-				{
-					stoppUhrLäuftFlag = true;
-
-					labelTime.setText("");
-					core.Counter.ausgabe = 0;
-
+				{					
 					startButton.setText("Stopp");
-
-					stoppUhr = new core.Counter();
-					core.Counter.running = true;
-					core.Counter.uic = this;
 					startClock();
-
-					stoppUhr.start();
+					timer = new Timer(labelTime);
+					timer.start();
 				}
 				else
-				{
-					stoppUhrLäuftFlag = false;
+				{					
 					startButton.setText("Start");
-
-					stoppUhr.interrupt();
-
+					timer.stop();
 					endClock();
-
 					loadAll();
 				}
 			else
@@ -164,7 +150,7 @@ public class UserInterfaceController
 	public void closeRequest()
 	{
 		// Prüft, ob die Stoppuhr noch läuft
-		if(stoppUhrLäuftFlag == true)
+		if(isTimerRunning())
 		{
 			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Stoppuhr läuft noch!", icon, stage, null, false);			
 		}
@@ -172,6 +158,11 @@ public class UserInterfaceController
 		{
 			stage.close();
 		}
+	}
+	
+	public boolean isTimerRunning()
+	{
+		return timer != null && timer.isRunning();
 	}
 
 	public void setLabels(String project, String task)
@@ -182,7 +173,7 @@ public class UserInterfaceController
 
 	public void openProjectGUI(ActionEvent e)
 	{
-		if( ! stoppUhrLäuftFlag)
+		if(!isTimerRunning())
 		{
 			try
 			{
@@ -478,14 +469,12 @@ public class UserInterfaceController
 
 	private void startClock()
 	{
-		stoppUhrLäuftFlag = true;
 		log.createStartTime();
 		startTimestamp = System.currentTimeMillis();
 	}
 
 	private void endClock()
 	{
-		stoppUhrLäuftFlag = false;
 		log.createEndTime();
 		endTimestamp = System.currentTimeMillis();
 		log.setDuration(endTimestamp - startTimestamp);

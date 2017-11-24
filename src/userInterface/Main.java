@@ -50,7 +50,7 @@ public class Main extends Application
 			{
 				public void handle(WindowEvent we)
 				{
-					if(controller.stoppUhrLäuftFlag == true)
+					if(controller.isTimerRunning())
 					{
 						AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Die Stoppuhr läuft noch!", new Image("/userInterface/icon.png"), stage, null, false);
 						
