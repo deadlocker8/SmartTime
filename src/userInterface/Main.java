@@ -30,10 +30,9 @@ public class Main extends Application
 			Parent root = (Parent)loader.load();
 
 			Scene scene = new Scene(root, 800, 800);
-			
+			scene.getStylesheets().add("/userInterface/application.css");
 			stage.setMinHeight(500);
 			stage.setMinWidth(700);
-
 			stage.setResizable(true);
 			stage.setTitle("SmartTime");
 			stage.setScene(scene);
