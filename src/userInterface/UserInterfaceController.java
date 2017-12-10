@@ -845,10 +845,14 @@ public class UserInterfaceController
 	{
 		settings = Utils.loadSettings();
 		if(settings != null)
-		{
+		{			
 			setLabels(settings.getLastProject(), settings.getLastTask());
 			projektExistiertFlag = true;
 			newProject(settings.getLastProject(), settings.getLastTask());
+			if(settings.getSavePath() == null)
+			{
+				settings.setSavePath(DEFAULT_SAVE_PATH);
+			}
 		}
 		else
 		{
