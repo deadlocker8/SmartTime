@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<anttasks:AntTask xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:anttasks="http://org.eclipse.fx.ide.dt/1.0" buildDirectory="C:\Program Files\Java\re1.8.0_25">
-  <deploy>
-    <application name="JavaFX" mainclass="userInterface." version="3.3.0" toolkit="fx"/>
-    <info title="test.SmartTime" vendor="Robert Goldmann"/>
-  </deploy>
-  <signar/>
-</anttasks:AntTask>
