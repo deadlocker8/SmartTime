@@ -860,6 +860,34 @@ public class Controller
 			settings.setSavePath(DEFAULT_SAVE_PATH);
 		}
 	}
+	
+	@FXML
+	public void createReport()
+	{
+		try
+		{
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/ReportGUI.fxml"));
+			Parent root = (Parent)fxmlLoader.load();
+			Stage newStage = new Stage();
+			newStage.setScene(new Scene(root, 500, 500));
+			newStage.setMinWidth(300);
+			newStage.setMinHeight(300);
+			newStage.setTitle("PDF-Report erstellen");
+			newStage.getIcons().add(icon);
+			newStage.initOwner(stage);
+
+			ReportController reportController = (ReportController)fxmlLoader.getController();
+			reportController.init(this, newStage, settings, icon);
+
+			newStage.setResizable(true);
+			newStage.initModality(Modality.APPLICATION_MODAL);
+			newStage.showAndWait();
+		}
+		catch(IOException d)
+		{
+			Logger.error(d);
+		}
+	}
 
 	public void about()
 	{

@@ -41,6 +41,11 @@
                         <MenuItem mnemonicParsing="false" onAction="#exportAsJSON" text="als JSON" />
                      </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Report">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#createReport" text="PDF Report erstellen" />
+                     </items>
+                  </Menu>
                   <Menu mnemonicParsing="false" text="?">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#about" text="Über" />
