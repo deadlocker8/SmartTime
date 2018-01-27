@@ -28,11 +28,11 @@ public class EditController
 	@FXML private ComboBox<String> dropdown;
 	@FXML private ComboBox<String> dropdownTasks;
 	private Stage stage;
-	private UserInterfaceController controller;
+	private Controller controller;
 	private Image icon;
 	private LogObject object;
 
-	public void init(UserInterfaceController controller, Stage stage, Settings settings, Image icon, LogObject object)
+	public void init(Controller controller, Stage stage, Settings settings, Image icon, LogObject object)
 	{
 		this.controller = controller;
 		this.stage = stage;

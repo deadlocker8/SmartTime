@@ -52,11 +52,11 @@ public class InsertTimeController
 	@FXML private ComboBox<String> comboBoxTask;
 	
 	private Stage stage;
-	private UserInterfaceController controller;
+	private Controller controller;
 	private String savePath;
 	private Image icon;
 	
-	public void init(Stage stage, UserInterfaceController controller, Settings settings, Image icon)
+	public void init(Stage stage, Controller controller, Settings settings, Image icon)
 	{	
 		this.savePath = settings.getSavePath() + "/" + Utils.DATABASE_NAME;
 		this.stage = stage;

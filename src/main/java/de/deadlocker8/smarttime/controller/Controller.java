@@ -66,7 +66,7 @@ import tools.AlertGenerator;
 import tools.ConvertTo;
 import tools.PathUtils;
 
-public class UserInterfaceController
+public class Controller
 {
 	@FXML private Label aktuellesProjektAusgabe;
 	@FXML private Label aktuellerTaskAusgabe;
@@ -184,7 +184,7 @@ public class UserInterfaceController
 		{
 			try
 			{
-				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/projektFenster.fxml"));
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/ProjectGUI.fxml"));
 				Parent root = (Parent)fxmlLoader.load();
 				Stage newStage = new Stage();
 				newStage.setScene(new Scene(root, 455, 300));
@@ -193,7 +193,7 @@ public class UserInterfaceController
 
 				newStage.getIcons().add(icon);
 
-				ProjektFensterController pfc = (ProjektFensterController)fxmlLoader.getController();
+				ProjectController pfc = (ProjectController)fxmlLoader.getController();
 				pfc.init(this, newStage, settings, icon);
 
 				newStage.setResizable(false);
@@ -438,7 +438,7 @@ public class UserInterfaceController
 	{
 		try
 		{
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/chartGUI.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/ChartGUI.fxml"));
 			Parent root = (Parent)fxmlLoader.load();
 			Scene scene = new Scene(root, 800, 600);
 			scene.getStylesheets().add("/de/deadlocker8/smarttime/css/Chart.css");
@@ -718,7 +718,7 @@ public class UserInterfaceController
 	{
 		try
 		{
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/editGUI.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/EditGUI.fxml"));
 			Parent root = (Parent)fxmlLoader.load();
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(root, 455, 280));

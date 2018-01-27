@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import de.deadlocker8.smarttime.controller.UserInterfaceController;
+import de.deadlocker8.smarttime.controller.Controller;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +27,7 @@ public class Main extends Application
 	{
 		try
 		{			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/userInterface.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/MainGUI.fxml"));
 			Parent root = (Parent)loader.load();
 
 			Scene scene = new Scene(root, 800, 800);
@@ -38,7 +38,7 @@ public class Main extends Application
 			stage.setTitle("SmartTime");
 			stage.setScene(scene);
 			
-			UserInterfaceController controller = (UserInterfaceController)loader.getController();			
+			Controller controller = (Controller)loader.getController();			
 			controller.init(stage);
 
 			stage.getIcons().add(new Image("/de/deadlocker8/smarttime/icon.png"));

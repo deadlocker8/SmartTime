@@ -24,16 +24,16 @@ import tools.AlertGenerator;
  *
  */
 
-public class ProjektFensterController
+public class ProjectController
 {
 	@FXML private Button abbrechenButton;
 	@FXML private ComboBox<String> dropdown;
 	@FXML private ComboBox<String> dropdownTasks;
 	private Stage stage;
-	private UserInterfaceController controller;
+	private Controller controller;
 	private Image icon;
 
-	public void init(UserInterfaceController controller, Stage stage, Settings settings, Image icon)
+	public void init(Controller controller, Stage stage, Settings settings, Image icon)
 	{
 		this.controller = controller;
 		this.stage = stage;
