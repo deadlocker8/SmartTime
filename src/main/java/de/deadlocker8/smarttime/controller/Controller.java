@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -837,7 +838,20 @@ public class Controller
 		ArrayList<String> creditLines = new ArrayList<>();
 		creditLines.add(bundle.getString("credits"));
 
-		// TODO
-//		AlertGenerator.showAboutAlertWithCredits(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", creditLines, icon, stage, null, false);
+		String appName = bundle.getString("app.name");
+
+		StringBuilder content = new StringBuilder(MessageFormat.format("Version:     {0} ({1})\r\nDate:        {2}\r\nAuthors:    {3}\r\n",
+				bundle.getString("version.name"),
+				bundle.getString("version.code"),
+				bundle.getString("version.date"),
+				"Robert Goldmann"));
+
+		content.append("\r\nCredits:\r\n");
+		for(String line : creditLines)
+		{
+			content.append(line).append("\r\n");
+		}
+
+		Alerts.getInstance().createAlert(AlertType.INFORMATION,  "About " + appName, appName, content.toString(), stage).show();
 	}
 }
