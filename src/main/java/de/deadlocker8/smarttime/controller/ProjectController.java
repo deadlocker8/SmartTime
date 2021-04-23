@@ -4,8 +4,6 @@ import de.deadlocker8.smarttime.core.SQL;
 import de.deadlocker8.smarttime.core.Settings;
 import de.deadlocker8.smarttime.core.Utils;
 import de.thecodelabs.utils.ui.Alerts;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
@@ -19,29 +17,29 @@ import java.util.Collections;
 
 /**
  * Controllerklasse für das Projektfenster
- * 
- * @author Robert
  *
+ * @author Robert
  */
 
 public class ProjectController
 {
-	@FXML private Button abbrechenButton;
-	@FXML private ComboBox<String> dropdown;
-	@FXML private ComboBox<String> dropdownTasks;
+	@FXML
+	private Button abbrechenButton;
+	@FXML
+	private ComboBox<String> dropdown;
+	@FXML
+	private ComboBox<String> dropdownTasks;
 	private Stage stage;
 	private Controller controller;
-	private Image icon;
 
-	public void init(Controller controller, Stage stage, Settings settings, Image icon)
+	public void init(Controller controller, Stage stage, Settings settings)
 	{
 		this.controller = controller;
 		this.stage = stage;
-		this.stage.setOnCloseRequest((handle)-> {
+		this.stage.setOnCloseRequest((handle) -> {
 			controller.projektExistiertFlag = false;
-	        stage.close();		  
-        });
-		this.icon = icon;
+			stage.close();
+		});
 
 		ArrayList<String> objects = new ArrayList<String>();
 
@@ -59,24 +57,19 @@ public class ProjectController
 		dropdown.setStyle("-fx-font-family: \"Arial\";-fx-font-size: 18px;");
 		dropdownTasks.setStyle("-fx-font-family: \"Arial\";-fx-font-size: 18px;");
 
-		dropdown.valueProperty().addListener(new ChangeListener<String>()
-		{
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
-			{
-				dropdownTasks.getItems().clear();
+		dropdown.valueProperty().addListener((observable, oldValue, newValue) -> {
+			dropdownTasks.getItems().clear();
 
-				if(newValue != null && ! newValue.equals(""))
+			if(newValue != null && !newValue.equals(""))
+			{
+				try
 				{
-					try
-					{
-						ArrayList<String> tasks = sql.getTaskNamesByProject(newValue);
-						Collections.sort(tasks);
-						dropdownTasks.getItems().addAll(tasks);
-					}
-					catch(Exception e)
-					{
-					}
+					ArrayList<String> tasks = sql.getTaskNamesByProject(newValue);
+					Collections.sort(tasks);
+					dropdownTasks.getItems().addAll(tasks);
+				}
+				catch(Exception e)
+				{
 				}
 			}
 		});

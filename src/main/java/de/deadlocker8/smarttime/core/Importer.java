@@ -7,7 +7,6 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.Alerts;
 import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -19,56 +18,50 @@ import java.util.regex.Pattern;
 
 public class Importer
 {
-	private String path;
-	private Stage stage;
-	private Image icon;
-	
-	public Importer(String path, Stage stage, Image icon)
+	private final String path;
+	private final Stage stage;
+
+	public Importer(String path, Stage stage)
 	{
 		this.path = path;
 		this.stage = stage;
-		this.icon = icon;
 	}
-	
+
 	public void importFromSmartTime(File file)
 	{
 		try
 		{
-			ArrayList<String > lines = readFile(file);
-			ArrayList<LogObject> objects = new ArrayList<LogObject>();
+			ArrayList<String> lines = readFile(file);
+			ArrayList<LogObject> objects = new ArrayList<>();
 			for(String item : lines)
 			{
 				String[] parts = item.split("\t");
-				
+
 				String date = parts[0];
 				String[] dateParts = date.split("-");
-				
+
 				LogObject current = new LogObject(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0]), parts[3], parts[4], Long.parseLong(parts[7]), parts[5], parts[6]);
-				objects.add(current);	
+				objects.add(current);
 			}
-			
-			SQL sql = new SQL(path);			
+
+			SQL sql = new SQL(path);
 			for(LogObject o : objects)
 			{
 				sql.insert(o);
 			}
-			
-			Platform.runLater(()->{
-				Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage);
-			});
+
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage));
 		}
 		catch(Exception e)
-		{			
+		{
 			Logger.error(e);
-			Platform.runLater(()->{
-				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage);
-			});
-		}		
-	}	
-	
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage));
+		}
+	}
+
 	public void importFromDB(File file)
-	{		
-		SQL sql = new SQL(file.getAbsolutePath());	
+	{
+		SQL sql = new SQL(file.getAbsolutePath());
 		try
 		{
 			ArrayList<LogObject> objects = sql.getLogObjects();
@@ -77,38 +70,34 @@ public class Importer
 			{
 				currentDB.insert(item);
 			}
-			
-			Platform.runLater(()->{
-				Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage);
-			});
+
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage));
 		}
 		catch(Exception e)
-		{			
+		{
 			Logger.error(e);
-			Platform.runLater(()->{
-				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage);
-			});
-		}		
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage));
+		}
 	}
-	
+
 	public void importFromJSON(File file)
-	{							
-		try 
-		{			
-			FileInputStream fis = new FileInputStream(file);			
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));		
-			String text = "";		
-			String line;		
-			while ((line = reader.readLine()) != null) 
+	{
+		try
+		{
+			FileInputStream fis = new FileInputStream(file);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+			StringBuilder text = new StringBuilder();
+			String line;
+			while((line = reader.readLine()) != null)
 			{
-				text = text + line;
-			}			
-			reader.close();			
-			
-			JsonObject allItems = new JsonParser().parse(text).getAsJsonObject();
-			
+				text.append(line);
+			}
+			reader.close();
+
+			JsonObject allItems = new JsonParser().parse(text.toString()).getAsJsonObject();
+
 			SQL sql = new SQL(path);
-			JsonArray loadedItems = (JsonArray)allItems.get("logObjects");
+			JsonArray loadedItems = (JsonArray) allItems.get("logObjects");
 			for(int i = 0; i < loadedItems.size(); i++)
 			{
 				JsonObject item = (JsonObject) loadedItems.get(i);
@@ -118,35 +107,33 @@ public class Importer
 				long duration = item.get("duration").getAsLong();
 				String project = item.get("project").getAsString();
 				String task = item.get("task").getAsString();
-				
+
 				String[] dateParts = date.split(Pattern.quote("."));
-				
-				LogObject loadedObject = new LogObject(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0]), startTime, endTime, duration, project, task);				
+
+				LogObject loadedObject = new LogObject(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0]), startTime, endTime, duration, project, task);
 				sql.insert(loadedObject);
 			}
 		}
 		catch(Exception e)
-		{			
+		{
 			Logger.error(e);
-			Platform.runLater(()->{
-				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage);
-			});
-		}					
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage));
+		}
 	}
-	
+
 	private ArrayList<String> readFile(File file) throws Exception
 	{
 		FileInputStream fis = new FileInputStream(file);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(fis));		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
 		ArrayList<String> list = new ArrayList<>();
 
-		String line;		
+		String line;
 		while((line = reader.readLine()) != null)
 		{
 			list.add(line);
 		}
-		
-		reader.close();		
+
+		reader.close();
 		return list;
 	}
 }

@@ -8,7 +8,6 @@ public class Settings
 
 	public Settings()
 	{
-
 	}
 
 	public Settings(String savePath, String lastProject, String lastTask)

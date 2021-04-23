@@ -4,21 +4,16 @@ import de.deadlocker8.smarttime.controller.Controller;
 import de.thecodelabs.logger.FileOutputOption;
 import de.thecodelabs.logger.LogLevelFilter;
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.application.ApplicationUtils;
-import de.thecodelabs.utils.application.container.PathType;
-import de.thecodelabs.utils.io.PathUtils;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.SystemUtils;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -33,7 +28,7 @@ public class Main extends Application
 		try
 		{
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/MainGUI.fxml"));
-			Parent root = (Parent) loader.load();
+			Parent root = loader.load();
 
 			Scene scene = new Scene(root, 800, 800);
 			scene.getStylesheets().add("/de/deadlocker8/smarttime/css/application.css");
@@ -43,7 +38,7 @@ public class Main extends Application
 			stage.setTitle("SmartTime");
 			stage.setScene(scene);
 
-			Controller controller = (Controller) loader.getController();
+			Controller controller = loader.getController();
 			controller.init(stage);
 
 			stage.getIcons().add(new Image("/de/deadlocker8/smarttime/icon.png"));
@@ -51,22 +46,18 @@ public class Main extends Application
 
 			// fängt die Aufforderung das Fenster zu schließen ab, um vorher
 			// noch eine Prüfung duchzuführen
-			stage.setOnCloseRequest(new EventHandler<WindowEvent>()
-			{
-				public void handle(WindowEvent we)
+			stage.setOnCloseRequest(we -> {
+				if(controller.isTimerRunning())
 				{
-					if(controller.isTimerRunning())
-					{
-						Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Stoppuhr läuft noch!", stage);
+					Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Stoppuhr läuft noch!", stage);
 
-						// "schluckt" die Aufforderung das Fenster zu schließen
-						// (Fenster wird dadurch nicht geschlossen)
-						we.consume();
-					}
-					else
-					{
-						stage.close();
-					}
+					// "schluckt" die Aufforderung das Fenster zu schließen
+					// (Fenster wird dadurch nicht geschlossen)
+					we.consume();
+				}
+				else
+				{
+					stage.close();
 				}
 			});
 		}

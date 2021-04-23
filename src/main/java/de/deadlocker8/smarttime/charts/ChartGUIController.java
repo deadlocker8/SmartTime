@@ -6,15 +6,12 @@ import de.deadlocker8.smarttime.core.Settings;
 import de.deadlocker8.smarttime.core.Utils;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.Alerts;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -26,33 +23,37 @@ import java.util.HashSet;
 @SuppressWarnings("rawtypes")
 public class ChartGUIController
 {
-	@FXML private Button showButton;
-	@FXML private ComboBox<String> projectBox;
-	@FXML private ComboBox<String> taskBox;
-	@FXML private ComboBox<String> yearBox;
-	@FXML private ComboBox<String> monthBox;
-	@FXML private AnchorPane chartPane;
+	@FXML
+	private Button showButton;
+	@FXML
+	private ComboBox<String> projectBox;
+	@FXML
+	private ComboBox<String> taskBox;
+	@FXML
+	private ComboBox<String> yearBox;
+	@FXML
+	private ComboBox<String> monthBox;
+	@FXML
+	private AnchorPane chartPane;
 
 	private Stage stage;
 	private ArrayList<String> tasks;
 	private ArrayList<String> years;
 	private ArrayList<String> months;
 	private SQL sql;
-	private Image icon;
 	private PieChartGenerator generator;
 	private SummaryGenerator summaryGenerator;
-	private BarChartGenerator barChartGenertator;	
-	
-	public void init(Settings settings, Stage stage, Image icon)
+	private BarChartGenerator barChartGenertator;
+
+	public void init(Settings settings, Stage stage)
 	{
 		try
 		{
-		    this.stage = stage;
-			this.icon = icon;
+			this.stage = stage;
 			String savePath = settings.getSavePath() + "/" + Utils.DATABASE_NAME;
 			sql = new SQL(savePath);
 
-			ArrayList<String> projects = new ArrayList<String>();
+			ArrayList<String> projects = new ArrayList<>();
 			projects.add("Alle Projekte");
 			ArrayList<String> projectNames = sql.getProjectNames();
 			projects.addAll(projectNames);
@@ -68,7 +69,7 @@ public class ChartGUIController
 			generator = new PieChartGenerator(savePath);
 			summaryGenerator = new SummaryGenerator(savePath);
 			barChartGenertator = new BarChartGenerator(savePath);
-			
+
 			years = sql.getYears();
 			Collections.sort(years);
 			yearBox.getItems().clear();
@@ -77,89 +78,162 @@ public class ChartGUIController
 			yearBox.getSelectionModel().select(0);
 			showPieChart(generator.getChart0000("Alle Projekte"));
 
-			projectBox.valueProperty().addListener(new ChangeListener<String>()
-			{
-				@Override
-				public void changed(ObservableValue ov, String t, String t1)
+			projectBox.valueProperty().addListener((ov, t, t1) -> {
+				String selectedProject = projectBox.getValue();
+				if(selectedProject.equals("Alle Projekte"))
 				{
-					String selectedProject = projectBox.getValue();
-					if(selectedProject.equals("Alle Projekte"))
+					try
 					{
-						try
-						{
-							taskBox.getItems().clear();
-							years = sql.getYears();
-							Collections.sort(years);
-							yearBox.getItems().clear();
-							yearBox.getItems().add("Alle Jahre");
-							yearBox.getItems().addAll(years);
-							yearBox.getSelectionModel().select(0);
-							monthBox.getItems().clear();
+						taskBox.getItems().clear();
+						years = sql.getYears();
+						Collections.sort(years);
+						yearBox.getItems().clear();
+						yearBox.getItems().add("Alle Jahre");
+						yearBox.getItems().addAll(years);
+						yearBox.getSelectionModel().select(0);
+						monthBox.getItems().clear();
 
-							showPieChart(generator.getChart0000("Alle Projekte"));
-						}
-						catch(Exception e)
-						{
-							Logger.error(e);
-							showErrorMessage();
-						}
+						showPieChart(generator.getChart0000("Alle Projekte"));
 					}
-					else
+					catch(Exception e)
 					{
-						try
+						Logger.error(e);
+						showErrorMessage();
+					}
+				}
+				else
+				{
+					try
+					{
+						tasks = getTasks(sql.getByProject(selectedProject));
+						taskBox.getItems().clear();
+						taskBox.getItems().add("Alle Tasks");
+						Collections.sort(tasks);
+						taskBox.getItems().addAll(tasks);
+						taskBox.getSelectionModel().select(0);
+
+						years = getYears(sql.getByProject(selectedProject));
+						Collections.sort(years);
+						yearBox.getItems().clear();
+						yearBox.getItems().add("Alle Jahre");
+						yearBox.getItems().addAll(years);
+						yearBox.getSelectionModel().select(0);
+
+						monthBox.getItems().clear();
+
+						showPieChart(generator.getChart1000(selectedProject, selectedProject));
+					}
+					catch(Exception e)
+					{
+						Logger.error(e);
+						showErrorMessage();
+					}
+				}
+			});
+
+			taskBox.valueProperty().addListener((ov, t, t1) -> {
+
+				String selectedProject = projectBox.getValue();
+				String selectedTask = taskBox.getValue();
+
+				if(selectedProject != null && selectedTask != null)
+				{
+					if(!selectedProject.equals("Alle Projekte"))
+					{
+						if(selectedTask.equals("Alle Tasks"))
 						{
-							tasks = getTasks(sql.getByProject(selectedProject));
-							taskBox.getItems().clear();
-							taskBox.getItems().add("Alle Tasks");
-							Collections.sort(tasks);
-							taskBox.getItems().addAll(tasks);
-							taskBox.getSelectionModel().select(0);
+							try
+							{
+								years = getYears(sql.getByProject(selectedProject));
+								Collections.sort(years);
+								yearBox.getItems().clear();
+								yearBox.getItems().add("Alle Jahre");
+								yearBox.getItems().addAll(years);
+								yearBox.getSelectionModel().select(0);
+								monthBox.getItems().clear();
 
-							years = getYears(sql.getByProject(selectedProject));
-							Collections.sort(years);
-							yearBox.getItems().clear();
-							yearBox.getItems().add("Alle Jahre");
-							yearBox.getItems().addAll(years);
-							yearBox.getSelectionModel().select(0);
-
-							monthBox.getItems().clear();
-
-							showPieChart(generator.getChart1000(selectedProject, selectedProject));
+								showPieChart(generator.getChart1000(selectedProject, selectedProject));
+							}
+							catch(Exception e)
+							{
+								Logger.error(e);
+								showErrorMessage();
+							}
 						}
-						catch(Exception e)
+						else
 						{
-							Logger.error(e);
-							showErrorMessage();
+							try
+							{
+								years = getYears(sql.getByProjectAndTask(selectedProject, selectedTask));
+								Collections.sort(years);
+								yearBox.getItems().clear();
+								yearBox.getItems().add("Alle Jahre");
+								yearBox.getItems().addAll(years);
+								yearBox.getSelectionModel().select(0);
+								monthBox.getItems().clear();
+
+								showSummary(summaryGenerator.getSummaryByProjectAndTask(selectedProject, selectedTask));
+							}
+							catch(Exception e)
+							{
+								Logger.error(e);
+								showErrorMessage();
+							}
 						}
 					}
 				}
 			});
 
-			taskBox.valueProperty().addListener(new ChangeListener<String>()
-			{
-				@Override
-				public void changed(ObservableValue ov, String t, String t1)
+			yearBox.valueProperty().addListener((ov, t, t1) -> {
+				String selectedProject = projectBox.getValue();
+				String selectedTask = taskBox.getValue();
+				String selectedYear = yearBox.getValue();
+
+				if(selectedProject != null && selectedYear != null)
 				{
-
-					String selectedProject = projectBox.getValue();
-					String selectedTask = taskBox.getValue();
-
-					if(selectedProject != null && selectedTask != null)
+					if(selectedProject.equals("Alle Projekte"))
 					{
-						if( ! selectedProject.equals("Alle Projekte"))
+						if(selectedYear.equals("Alle Jahre"))
 						{
-							if(selectedTask.equals("Alle Tasks"))
+							try
+							{
+								monthBox.getItems().clear();
+								showPieChart(generator.getChart0000(selectedProject));
+							}
+							catch(Exception e)
+							{
+								Logger.error(e);
+								showErrorMessage();
+							}
+						}
+						else
+						{
+							try
+							{
+								months = getMonths(sql.getLogObjects());
+								monthBox.getItems().clear();
+								monthBox.getItems().add("Alle Monate");
+								monthBox.getItems().addAll(months);
+								monthBox.getSelectionModel().select(0);
+
+								showPieChart(generator.getChart0010(Integer.parseInt(selectedYear), "Alle Projekte - " + selectedYear));
+							}
+							catch(Exception e)
+							{
+								Logger.error(e);
+								showErrorMessage();
+							}
+						}
+					}
+					else
+					{
+						if(selectedTask.equals("Alle Tasks"))
+						{
+							if(selectedYear.equals("Alle Jahre"))
 							{
 								try
 								{
-									years = getYears(sql.getByProject(selectedProject));
-									Collections.sort(years);
-									yearBox.getItems().clear();
-									yearBox.getItems().add("Alle Jahre");
-									yearBox.getItems().addAll(years);
-									yearBox.getSelectionModel().select(0);
 									monthBox.getItems().clear();
-
 									showPieChart(generator.getChart1000(selectedProject, selectedProject));
 								}
 								catch(Exception e)
@@ -172,14 +246,28 @@ public class ChartGUIController
 							{
 								try
 								{
-									years = getYears(sql.getByProjectAndTask(selectedProject, selectedTask));
-									Collections.sort(years);
-									yearBox.getItems().clear();
-									yearBox.getItems().add("Alle Jahre");
-									yearBox.getItems().addAll(years);
-									yearBox.getSelectionModel().select(0);
+									months = getMonths(sql.getByProjectAndYear(selectedProject, Integer.parseInt(selectedYear)));
 									monthBox.getItems().clear();
-										
+									monthBox.getItems().add("Alle Monate");
+									monthBox.getItems().addAll(months);
+									monthBox.getSelectionModel().select(0);
+
+									showPieChart(generator.getChart1010(selectedProject, Integer.parseInt(selectedYear), selectedProject + " - " + selectedYear));
+								}
+								catch(Exception e)
+								{
+									Logger.error(e);
+									showErrorMessage();
+								}
+							}
+						}
+						else
+						{
+							if(selectedYear.equals("Alle Jahre"))
+							{
+								try
+								{
+									monthBox.getItems().clear();
 									showSummary(summaryGenerator.getSummaryByProjectAndTask(selectedProject, selectedTask));
 								}
 								catch(Exception e)
@@ -188,30 +276,17 @@ public class ChartGUIController
 									showErrorMessage();
 								}
 							}
-						}
-					}
-				}
-			});
-
-			yearBox.valueProperty().addListener(new ChangeListener<String>()
-			{
-				@Override
-				public void changed(ObservableValue ov, String t, String t1)
-				{
-					String selectedProject = projectBox.getValue();
-					String selectedTask = taskBox.getValue();
-					String selectedYear = yearBox.getValue();
-
-					if(selectedProject != null && selectedYear != null)
-					{
-						if(selectedProject.equals("Alle Projekte"))
-						{
-							if(selectedYear.equals("Alle Jahre"))
+							else
 							{
 								try
 								{
+									months = getMonths(sql.getByProjectAndTaskAndYear(selectedProject, selectedTask, Integer.parseInt(selectedYear)));
 									monthBox.getItems().clear();
-									showPieChart(generator.getChart0000(selectedProject));
+									monthBox.getItems().add("Alle Monate");
+									monthBox.getItems().addAll(months);
+									monthBox.getSelectionModel().select(0);
+
+									showSummary(summaryGenerator.getSummaryByProjectAndTaskAndYear(selectedProject, selectedTask, Integer.parseInt(selectedYear)));
 								}
 								catch(Exception e)
 								{
@@ -219,16 +294,27 @@ public class ChartGUIController
 									showErrorMessage();
 								}
 							}
-							else
+						}
+					}
+				}
+			});
+
+			monthBox.valueProperty().addListener((ov, t, t1) -> {
+				String selectedProject = projectBox.getValue();
+				String selectedTask = taskBox.getValue();
+				String selectedYear = yearBox.getValue();
+				String selectedMonth = monthBox.getValue();
+
+				if(selectedProject != null && selectedYear != null && selectedMonth != null)
+				{
+					if(selectedProject.equals("Alle Projekte"))
+					{
+						if(!selectedYear.equals("Alle Jahre"))
+						{
+							if(selectedMonth.equals("Alle Monate"))
 							{
 								try
-								{									
-									months = getMonths(sql.getLogObjects());
-									monthBox.getItems().clear();
-									monthBox.getItems().add("Alle Monate");
-									monthBox.getItems().addAll(months);									
-									monthBox.getSelectionModel().select(0);
-
+								{
 									showPieChart(generator.getChart0010(Integer.parseInt(selectedYear), "Alle Projekte - " + selectedYear));
 								}
 								catch(Exception e)
@@ -237,34 +323,30 @@ public class ChartGUIController
 									showErrorMessage();
 								}
 							}
-						}
-						else
-						{
-							if(selectedTask.equals("Alle Tasks"))
+							else
 							{
-								if(selectedYear.equals("Alle Jahre"))
+								try
 								{
-									try
-									{
-										monthBox.getItems().clear();
-										showPieChart(generator.getChart1000(selectedProject, selectedProject));
-									}
-									catch(Exception e)
-									{
-										Logger.error(e);
-										showErrorMessage();
-									}
+									showPieChart(generator.getChart0011(Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth), "Alle Projekte - " + selectedMonth + " " + selectedYear));
 								}
-								else
+								catch(Exception e)
+								{
+									Logger.error(e);
+									showErrorMessage();
+								}
+							}
+						}
+					}
+					else
+					{
+						if(selectedTask.equals("Alle Tasks"))
+						{
+							if(!selectedYear.equals("Alle Jahre"))
+							{
+								if(selectedMonth.equals("Alle Monate"))
 								{
 									try
 									{
-										months = getMonths(sql.getByProjectAndYear(selectedProject, Integer.parseInt(selectedYear)));
-										monthBox.getItems().clear();
-										monthBox.getItems().add("Alle Monate");
-										monthBox.getItems().addAll(months);
-										monthBox.getSelectionModel().select(0);
-
 										showPieChart(generator.getChart1010(selectedProject, Integer.parseInt(selectedYear), selectedProject + " - " + selectedYear));
 									}
 									catch(Exception e)
@@ -273,33 +355,11 @@ public class ChartGUIController
 										showErrorMessage();
 									}
 								}
-							}
-							else
-							{
-								if(selectedYear.equals("Alle Jahre"))
-								{
-									try
-									{
-										monthBox.getItems().clear();
-										showSummary(summaryGenerator.getSummaryByProjectAndTask(selectedProject, selectedTask));
-									}
-									catch(Exception e)
-									{
-										Logger.error(e);
-										showErrorMessage();
-									}
-								}
 								else
 								{
 									try
 									{
-										months = getMonths(sql.getByProjectAndTaskAndYear(selectedProject, selectedTask, Integer.parseInt(selectedYear)));
-										monthBox.getItems().clear();
-										monthBox.getItems().add("Alle Monate");
-										monthBox.getItems().addAll(months);
-										monthBox.getSelectionModel().select(0);
-
-										showSummary(summaryGenerator.getSummaryByProjectAndTaskAndYear(selectedProject, selectedTask, Integer.parseInt(selectedYear)));
+										showPieChart(generator.getChart1011(selectedProject, Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth), selectedProject + " - " + selectedMonth + " " + selectedYear));
 									}
 									catch(Exception e)
 									{
@@ -309,113 +369,34 @@ public class ChartGUIController
 								}
 							}
 						}
-					}
-				}
-			});
-
-			monthBox.valueProperty().addListener(new ChangeListener<String>()
-			{
-				@Override
-				public void changed(ObservableValue ov, String t, String t1)
-				{
-					String selectedProject = projectBox.getValue();
-					String selectedTask = taskBox.getValue();
-					String selectedYear = yearBox.getValue();
-					String selectedMonth = monthBox.getValue();
-
-					if(selectedProject != null && selectedYear != null && selectedMonth != null)
-					{
-						if(selectedProject.equals("Alle Projekte"))
+						else
 						{
 							if(!selectedYear.equals("Alle Jahre"))
 							{
 								if(selectedMonth.equals("Alle Monate"))
 								{
 									try
-									{							
-										showPieChart(generator.getChart0010(Integer.parseInt(selectedYear), "Alle Projekte - " + selectedYear));
-									}								
+									{
+										showSummary(summaryGenerator.getSummaryByProjectAndTask(selectedProject, selectedTask));
+									}
 									catch(Exception e)
 									{
-										Logger.error(e);
 										showErrorMessage();
+										Logger.error(e);
 									}
 								}
 								else
 								{
 									try
 									{
-										showPieChart(generator.getChart0011(Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth), "Alle Projekte - " + selectedMonth + " " + selectedYear));
+										showBarChart(barChartGenertator.getBarChart(selectedProject, selectedTask, Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth)));
 									}
 									catch(Exception e)
 									{
-										Logger.error(e);
 										showErrorMessage();
+										Logger.error(e);
 									}
 								}
-							}							
-						}
-						else
-						{
-							if(selectedTask.equals("Alle Tasks"))
-							{
-								if(!selectedYear.equals("Alle Jahre"))
-								{
-									if(selectedMonth.equals("Alle Monate"))
-									{
-										try
-										{
-											showPieChart(generator.getChart1010(selectedProject, Integer.parseInt(selectedYear), selectedProject + " - " + selectedYear));
-										}
-										catch(Exception e)
-										{
-											Logger.error(e);
-											showErrorMessage();										
-										}
-									}
-									else
-									{
-										try
-										{
-											showPieChart(generator.getChart1011(selectedProject, Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth), selectedProject + " - " + selectedMonth + " " + selectedYear));
-										}
-										catch(Exception e)
-										{
-											Logger.error(e);
-											showErrorMessage();										
-										}
-									}
-								}								
-							}
-							else
-							{
-								if(!selectedYear.equals("Alle Jahre"))
-								{
-									if(selectedMonth.equals("Alle Monate"))
-									{
-										try
-										{
-											showSummary(summaryGenerator.getSummaryByProjectAndTask(selectedProject, selectedTask));
-										}
-										catch(Exception e)
-										{
-											showErrorMessage();
-											Logger.error(e);
-										}
-									}
-									else
-									{
-										try
-										{
-											showBarChart(barChartGenertator.getBarChart(selectedProject, selectedTask, Integer.parseInt(selectedYear), Utils.getMonthNumber(selectedMonth)));
-										}
-										catch(Exception e)
-										{
-											showErrorMessage();
-											Logger.error(e);
-										}
-									}
-								}			
 							}
 						}
 					}
@@ -428,7 +409,7 @@ public class ChartGUIController
 			showErrorMessage();
 		}
 	}
-	
+
 	private void showErrorMessage()
 	{
 		Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Erstellen des Diagramms.", stage);
@@ -444,9 +425,9 @@ public class ChartGUIController
 		AnchorPane.setRightAnchor(chart, 14.0);
 		chartPane.setMaxHeight(Double.MAX_VALUE);
 	}
-	
+
 	private void showSummary(VBox vboxSummary)
-	{			
+	{
 		chartPane.getChildren().clear();
 		chartPane.getChildren().add(vboxSummary);
 		AnchorPane.setBottomAnchor(vboxSummary, 14.0);
@@ -466,43 +447,43 @@ public class ChartGUIController
 		AnchorPane.setRightAnchor(chart, 14.0);
 		chartPane.setMaxHeight(Double.MAX_VALUE);
 	}
-	
+
 	private ArrayList<String> getTasks(ArrayList<LogObject> objects)
 	{
-		HashSet<String> tasks = new HashSet<String>();
+		HashSet<String> tasks = new HashSet<>();
 		for(LogObject current : objects)
 		{
 			tasks.add(String.valueOf(current.getTask()));
 		}
-		return new ArrayList<String>(tasks);
+		return new ArrayList<>(tasks);
 	}
 
 	private ArrayList<String> getYears(ArrayList<LogObject> objects)
 	{
-		HashSet<String> years = new HashSet<String>();
+		HashSet<String> years = new HashSet<>();
 		for(LogObject current : objects)
 		{
 			years.add(String.valueOf(current.getYear()));
 		}
-		return new ArrayList<String>(years);
+		return new ArrayList<>(years);
 	}
 
 	private ArrayList<String> getMonths(ArrayList<LogObject> objects)
 	{
-		HashSet<Integer> months = new HashSet<Integer>();
+		HashSet<Integer> months = new HashSet<>();
 		for(LogObject current : objects)
 		{
 			months.add(current.getMonth());
 		}
 
-		ArrayList<String> monthNames = new ArrayList<String>();
+		ArrayList<String> monthNames = new ArrayList<>();
 		ArrayList<Integer> monthsNumbers = new ArrayList<>(months);
 
-		for(int k = 0; k < monthsNumbers.size(); k++)
-		{			
-		    monthNames.add(Utils.getMonthName(monthsNumbers.get(k)-1));
+		for(Integer monthsNumber : monthsNumbers)
+		{
+			monthNames.add(Utils.getMonthName(monthsNumber - 1));
 		}
 
 		return monthNames;
-	}	
+	}
 }

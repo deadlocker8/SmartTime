@@ -1,14 +1,10 @@
 package de.deadlocker8.smarttime.charts;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
 import de.deadlocker8.smarttime.core.LogObject;
 import de.deadlocker8.smarttime.core.SQL;
 import de.deadlocker8.smarttime.core.Utils;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.event.*;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -16,7 +12,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class BarChartGenerator
 {
@@ -34,8 +32,8 @@ public class BarChartGenerator
 
 	private String getHours(int minutes)
 	{
-		int hours = (int)minutes / 60;
-		int min = (int)minutes % 60;
+		int hours = (int) minutes / 60;
+		int min = (int) minutes % 60;
 		return "" + hours + " h " + min + " min";
 	}
 
@@ -44,11 +42,9 @@ public class BarChartGenerator
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, year);
 		calendar.set(Calendar.MONTH, month);
-		calendar.set(Calendar.DATE, - 1);
+		calendar.set(Calendar.DATE, -1);
 
-		int numDays = calendar.getActualMaximum(Calendar.DATE);
-
-		return numDays;
+		return calendar.getActualMaximum(Calendar.DATE);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,7 +52,7 @@ public class BarChartGenerator
 	{
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
-		final BarChart<String, Number> chart = new BarChart<String, Number>(xAxis, yAxis);
+		final BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
 		chart.setTitle(project + " - " + task + " - " + Utils.getMonthName(month - 1) + " " + year);
 		xAxis.setLabel("Tag");
 		yAxis.setLabel("Zeit in Minuten");
@@ -74,7 +70,7 @@ public class BarChartGenerator
 			times[i] = 0L;
 			for(LogObject current : objects)
 			{
-				if(current.getDay() == i+1)
+				if(current.getDay() == i + 1)
 				{
 					times[i] += getMinute(current.getDuration());
 				}
@@ -83,7 +79,7 @@ public class BarChartGenerator
 
 		for(int l = 0; l < getMax(year, month); l++)
 		{
-			series.getData().add(new XYChart.Data<String, Number>(String.valueOf(l + 1), times[l]));
+			series.getData().add(new XYChart.Data<>(String.valueOf(l + 1), times[l]));
 		}
 		chart.getData().addAll(series);
 
@@ -95,23 +91,13 @@ public class BarChartGenerator
 				String stunden = getHours(data.getYValue().intValue());
 				tooltip.setText(stunden);
 				Node node = data.getNode();
-				node.setOnMouseEntered(new EventHandler<MouseEvent>()
-				{
-					@Override
-					public void handle(MouseEvent event)
-					{
-						Point2D p = node.localToScreen(event.getX() + 5, event.getY() + 7);
-						tooltip.show(node, p.getX(), p.getY());
-					}
+
+				node.setOnMouseEntered(event -> {
+					Point2D p = node.localToScreen(event.getX() + 5, event.getY() + 7);
+					tooltip.show(node, p.getX(), p.getY());
 				});
-				node.setOnMouseExited(new EventHandler<MouseEvent>()
-				{
-					@Override
-					public void handle(MouseEvent event)
-					{
-						tooltip.hide();
-					}
-				});
+
+				node.setOnMouseExited(event -> tooltip.hide());
 			}
 		}
 		return chart;

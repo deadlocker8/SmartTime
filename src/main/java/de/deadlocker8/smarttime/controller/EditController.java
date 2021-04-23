@@ -39,7 +39,7 @@ public class EditController
 		this.icon = icon;
 		this.object = object;
 
-		ArrayList<String> objects = new ArrayList<String>();
+		ArrayList<String> objects = new ArrayList<>();
 
 		SQL sql = new SQL(settings.getSavePath() + "/" + Utils.DATABASE_NAME);
 		try
@@ -55,24 +55,19 @@ public class EditController
 		dropdown.setStyle("-fx-font-family: \"Arial\";-fx-font-size: 18px;");
 		dropdownTasks.setStyle("-fx-font-family: \"Arial\";-fx-font-size: 18px;");
 
-		dropdown.valueProperty().addListener(new ChangeListener<String>()
-		{
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
-			{
-				dropdownTasks.getItems().clear();
+		dropdown.valueProperty().addListener((observable, oldValue, newValue) -> {
+			dropdownTasks.getItems().clear();
 
-				if(newValue != null && ! newValue.equals(""))
+			if(newValue != null && ! newValue.equals(""))
+			{
+				try
 				{
-					try
-					{
-						ArrayList<String> tasks = sql.getTaskNamesByProject(newValue);
-						Collections.sort(tasks);
-						dropdownTasks.getItems().addAll(tasks);
-					}
-					catch(Exception e)
-					{
-					}
+					ArrayList<String> tasks = sql.getTaskNamesByProject(newValue);
+					Collections.sort(tasks);
+					dropdownTasks.getItems().addAll(tasks);
+				}
+				catch(Exception e)
+				{
 				}
 			}
 		});

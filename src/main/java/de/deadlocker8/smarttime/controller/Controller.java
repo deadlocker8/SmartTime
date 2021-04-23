@@ -1,18 +1,7 @@
 package de.deadlocker8.smarttime.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.regex.Pattern;
-
 import de.deadlocker8.smarttime.charts.ChartGUIController;
+import de.deadlocker8.smarttime.core.Timer;
 import de.deadlocker8.smarttime.core.*;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.io.PathUtils;
@@ -21,10 +10,10 @@ import de.thecodelabs.utils.util.SystemUtils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,21 +22,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -57,24 +33,41 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import javafx.util.Callback;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
+import java.util.regex.Pattern;
 
 
 public class Controller
 {
-	@FXML private Label aktuellesProjektAusgabe;
-	@FXML private Label aktuellerTaskAusgabe;
-	@FXML public Label labelTime;
-	@FXML private Accordion accordion;
-	@FXML private TitledPane Projekte;
-	@FXML private TitledPane gesamtesLog;
-	@FXML private AnchorPane MainFrame;
-	@FXML private ToggleButton startButton;
-	@FXML private TableView<LogObject> table;
-	@FXML private ScrollPane scrollPane;
-	@FXML private Label labelSeparator;
-	@FXML private Label labelSavePath;
+	@FXML
+	private Label aktuellesProjektAusgabe;
+	@FXML
+	private Label aktuellerTaskAusgabe;
+	@FXML
+	public Label labelTime;
+	@FXML
+	private Accordion accordion;
+	@FXML
+	private TitledPane Projekte;
+	@FXML
+	private TitledPane gesamtesLog;
+	@FXML
+	private AnchorPane MainFrame;
+	@FXML
+	private ToggleButton startButton;
+	@FXML
+	private TableView<LogObject> table;
+	@FXML
+	private ScrollPane scrollPane;
+	@FXML
+	private Label labelSeparator;
+	@FXML
+	private Label labelSavePath;
 
 	private Stage stage;
 	private Timer timer;
@@ -85,7 +78,7 @@ public class Controller
 	private long startTimestamp;
 	private long endTimestamp;
 	private int longestProject;
-	private ArrayList<LogObject> logObjects = new ArrayList<LogObject>();
+	private ArrayList<LogObject> logObjects = new ArrayList<>();
 	private final String DEFAULT_SAVE_PATH = SystemUtils.getApplicationSupportDirectoryPath("Deadlocker", "SmartTime").toString();
 	private SQL sql;
 	private Stage waitingStage = new Stage();
@@ -107,12 +100,12 @@ public class Controller
 		loadSettings();
 		createLogView();
 		loadAll();
-		
+
 		setLabelSavePath();
 
 		// verwaltet den Start/Stopp-Button
 		startButton.setOnAction(event -> {
-			if(projektExistiertFlag == true)
+			if(projektExistiertFlag)
 			{
 				if(startButton.isSelected())
 				{
@@ -164,7 +157,7 @@ public class Controller
 		aktuellesProjektAusgabe.setText(project);
 		aktuellerTaskAusgabe.setText(task);
 	}
-	
+
 	private void setLabelSavePath()
 	{
 		String savePathForLabel = settings.getSavePath() + "/" + Utils.DATABASE_NAME;
@@ -180,7 +173,7 @@ public class Controller
 			try
 			{
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/ProjectGUI.fxml"));
-				Parent root = (Parent)fxmlLoader.load();
+				Parent root = fxmlLoader.load();
 				Stage newStage = new Stage();
 				newStage.setScene(new Scene(root, 455, 300));
 				newStage.setTitle("Neues Projekt");
@@ -188,8 +181,8 @@ public class Controller
 
 				newStage.getIcons().add(icon);
 
-				ProjectController pfc = (ProjectController)fxmlLoader.getController();
-				pfc.init(this, newStage, settings, icon);
+				ProjectController pfc = fxmlLoader.getController();
+				pfc.init(this, newStage, settings);
 
 				newStage.setResizable(false);
 				newStage.initModality(Modality.APPLICATION_MODAL);
@@ -218,7 +211,7 @@ public class Controller
 		boxRoot.getChildren().add(labelRoot);
 		boxRoot.getChildren().add(labelRootTime);
 
-		TreeItem<HBox> gesamt = new TreeItem<HBox>(boxRoot);
+		TreeItem<HBox> gesamt = new TreeItem<>(boxRoot);
 		gesamt.setExpanded(true);
 
 		try
@@ -239,9 +232,9 @@ public class Controller
 				box.getChildren().add(labelProjekt);
 				box.getChildren().add(labelProjektTime);
 
-				item = new TreeItem<HBox>(box);
+				item = new TreeItem<>(box);
 
-				aktuelleTasks = new ArrayList<TreeItem<HBox>>();
+				aktuelleTasks = new ArrayList<>();
 
 				ArrayList<String> taskNames = sql.getTaskNamesByProject(projectName);
 				Collections.sort(taskNames);
@@ -258,7 +251,7 @@ public class Controller
 
 					// und ein neus TreeItem erzeugt, was später Kind des
 					// übergeordneten Knoten mit dem Projektnamen sein wird
-					aktuelleTasks.add(new TreeItem<HBox>(box2));
+					aktuelleTasks.add(new TreeItem<>(box2));
 				}
 
 				// fügt alle TreeItems der Ansicht hinzu
@@ -267,7 +260,7 @@ public class Controller
 			}
 
 			gesamt.getChildren().setAll(alleTasks);
-			TreeView<HBox> tree = new TreeView<HBox>(gesamt);
+			TreeView<HBox> tree = new TreeView<>(gesamt);
 			Projekte.setContent(tree);
 		}
 		catch(Exception e)
@@ -323,69 +316,54 @@ public class Controller
 		table.getColumns().clear();
 
 		TableColumn<LogObject, String> dates = new TableColumn<>("Datum");
-		dates.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LogObject, String>, ObservableValue<String>>()
-		{
-			@Override
-			public ObservableValue<String> call(CellDataFeatures<LogObject, String> param)
-			{
-				StringProperty value = new SimpleStringProperty();
-				value.set(param.getValue().getDate());
-				return value;
-			}
+		dates.setCellValueFactory(param -> {
+			StringProperty value = new SimpleStringProperty();
+			value.set(param.getValue().getDate());
+			return value;
 		});
 		dates.setStyle("-fx-alignment: CENTER;");
-		dates.setComparator(new Comparator<String>()
-		{
-			@Override
-			public int compare(String input1, String input2)
+		dates.setComparator((input1, input2) -> {
+			// 0 --> input1 == input2
+			// 1 --> input1 > input2
+			// -1 --> input1 < input2
+
+			if(input1.equals(input2))
 			{
-				// 0 --> input1 == input2
-				// 1 --> input1 > input2
-				// -1 --> input1 < input2
+				return 0;
+			}
+			else
+			{
+				String[] date1 = input1.split(Pattern.quote("."));
+				String[] date2 = input2.split(Pattern.quote("."));
 
-				if(input1.equals(input2))
-				{
-					return 0;
-				}
-				else
-				{
-					String[] date1 = input1.split(Pattern.quote("."));
-					String[] date2 = input2.split(Pattern.quote("."));
+				String newDate1 = date1[2] + "." + date1[1] + "." + date1[0];
+				String newDate2 = date2[2] + "." + date2[1] + "." + date2[0];
 
-					String newDate1 = date1[2] + "." + date1[1] + "." + date1[0];
-					String newDate2 = date2[2] + "." + date2[1] + "." + date2[0];
-
-					return newDate1.compareTo(newDate2);
-				}
+				return newDate1.compareTo(newDate2);
 			}
 		});
 
 		TableColumn<LogObject, String> startTimes = new TableColumn<>("Startzeit");
-		startTimes.setCellValueFactory(new PropertyValueFactory<LogObject, String>("startTime"));
+		startTimes.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 		startTimes.setStyle("-fx-alignment: CENTER;");
 
 		TableColumn<LogObject, String> endTimes = new TableColumn<>("Endzeit");
-		endTimes.setCellValueFactory(new PropertyValueFactory<LogObject, String>("endTime"));
+		endTimes.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 		endTimes.setStyle("-fx-alignment: CENTER;");
 
 		TableColumn<LogObject, String> projects = new TableColumn<>("Projekt");
-		projects.setCellValueFactory(new PropertyValueFactory<LogObject, String>("project"));
+		projects.setCellValueFactory(new PropertyValueFactory<>("project"));
 		projects.setStyle("-fx-alignment: CENTER;");
 
 		TableColumn<LogObject, String> tasks = new TableColumn<>("Task");
-		tasks.setCellValueFactory(new PropertyValueFactory<LogObject, String>("task"));
+		tasks.setCellValueFactory(new PropertyValueFactory<>("task"));
 		tasks.setStyle("-fx-alignment: CENTER;");
 
 		TableColumn<LogObject, String> durations = new TableColumn<>("Dauer");
-		durations.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LogObject, String>, ObservableValue<String>>()
-		{
-			@Override
-			public ObservableValue<String> call(CellDataFeatures<LogObject, String> param)
-			{
-				StringProperty value = new SimpleStringProperty();
-				value.set(ConvertTo.ConvertMillisToTime(param.getValue().getDuration()));
-				return value;
-			}
+		durations.setCellValueFactory(param -> {
+			StringProperty value = new SimpleStringProperty();
+			value.set(ConvertTo.ConvertMillisToTime(param.getValue().getDuration()));
+			return value;
 		});
 		durations.setStyle("-fx-alignment: CENTER;");
 
@@ -407,16 +385,16 @@ public class Controller
 			{
 				if(event.isPrimaryButtonDown() && event.getClickCount() == 2)
 				{
-					Node node = ((Node)event.getTarget()).getParent();
+					Node node = ((Node) event.getTarget()).getParent();
 					TableRow<LogObject> row;
 					if(node instanceof TableRow)
 					{
-						row = (TableRow<LogObject>)node;
+						row = (TableRow<LogObject>) node;
 					}
 					else
 					{
 						// clicking on text part
-						row = (TableRow<LogObject>)node.getParent();
+						row = (TableRow<LogObject>) node.getParent();
 					}
 
 					editEntry(row.getItem());
@@ -434,14 +412,14 @@ public class Controller
 		try
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/ChartGUI.fxml"));
-			Parent root = (Parent)fxmlLoader.load();
+			Parent root = (Parent) fxmlLoader.load();
 			Scene scene = new Scene(root, 800, 600);
 			scene.getStylesheets().add("/de/deadlocker8/smarttime/css/Chart.css");
 			Stage newStage = new Stage();
 			newStage.setScene(scene);
 			newStage.setTitle("Diagramme");
-			ChartGUIController controller = (ChartGUIController)fxmlLoader.getController();
-			controller.init(settings, newStage, icon);
+			ChartGUIController controller = fxmlLoader.getController();
+			controller.init(settings, newStage);
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
@@ -516,13 +494,13 @@ public class Controller
 		try
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/InsertTimeGUI.fxml"));
-			Parent root = (Parent)fxmlLoader.load();
+			Parent root = fxmlLoader.load();
 			Scene scene = new Scene(root, 540, 400);
 			Stage newStage = new Stage();
 			newStage.setScene(scene);
 			newStage.setTitle("Zeit nachträglich einfügen");
 
-			InsertTimeController controller = (InsertTimeController)fxmlLoader.getController();
+			InsertTimeController controller = fxmlLoader.getController();
 			controller.init(newStage, this, settings, icon);
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
@@ -546,21 +524,17 @@ public class Controller
 		File file = fileChooser.showOpenDialog(stage);
 		if(file != null)
 		{
-			Thread importThread = new Thread()
-			{
-				public void run()
-				{
-					Platform.runLater(() -> {
-						showWaitingDialog("Importiere...", "Bitte warten...");
-					});
-					Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage, icon);
-					importer.importFromSmartTime(file);
-					Platform.runLater(() -> {
-						closeWaitingDialog();
-						loadAll();
-					});
-				}
-			};
+			Thread importThread = new Thread(() -> {
+				Platform.runLater(() -> {
+					showWaitingDialog("Importiere...", "Bitte warten...");
+				});
+				Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage);
+				importer.importFromSmartTime(file);
+				Platform.runLater(() -> {
+					closeWaitingDialog();
+					loadAll();
+				});
+			});
 			importThread.start();
 		}
 	}
@@ -574,21 +548,15 @@ public class Controller
 		File file = fileChooser.showOpenDialog(stage);
 		if(file != null)
 		{
-			Thread importThread = new Thread()
-			{
-				public void run()
-				{
-					Platform.runLater(() -> {
-						showWaitingDialog("Importiere...", "Bitte warten...");
-					});
-					Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage, icon);
-					importer.importFromDB(file);
-					Platform.runLater(() -> {
-						closeWaitingDialog();
-						loadAll();
-					});
-				}
-			};
+			Thread importThread = new Thread(() -> {
+				Platform.runLater(() -> showWaitingDialog("Importiere...", "Bitte warten..."));
+				Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage);
+				importer.importFromDB(file);
+				Platform.runLater(() -> {
+					closeWaitingDialog();
+					loadAll();
+				});
+			});
 			importThread.start();
 		}
 	}
@@ -602,21 +570,15 @@ public class Controller
 		File file = fileChooser.showOpenDialog(stage);
 		if(file != null)
 		{
-			Thread importThread = new Thread()
-			{
-				public void run()
-				{
-					Platform.runLater(() -> {
-						showWaitingDialog("Importiere...", "Bitte warten...");
-					});
-					Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage, icon);
-					importer.importFromJSON(file);
-					Platform.runLater(() -> {
-						closeWaitingDialog();
-						loadAll();
-					});
-				}
-			};
+			Thread importThread = new Thread(() -> {
+				Platform.runLater(() -> showWaitingDialog("Importiere...", "Bitte warten..."));
+				Importer importer = new Importer(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage);
+				importer.importFromJSON(file);
+				Platform.runLater(() -> {
+					closeWaitingDialog();
+					loadAll();
+				});
+			});
 			importThread.start();
 		}
 	}
@@ -653,20 +615,12 @@ public class Controller
 		File file = fileChooser.showSaveDialog(stage);
 		if(file != null)
 		{
-			Thread exportThread = new Thread()
-			{
-				public void run()
-				{
-					Platform.runLater(() -> {
-						showWaitingDialog("Exportiere...", "Bitte warten...");
-					});
-					Exporter exporter = new Exporter(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage, icon);
-					exporter.exportAsJSON(file);
-					Platform.runLater(() -> {
-						closeWaitingDialog();
-					});
-				}
-			};
+			Thread exportThread = new Thread(() -> {
+				Platform.runLater(() -> showWaitingDialog("Exportiere...", "Bitte warten..."));
+				Exporter exporter = new Exporter(settings.getSavePath() + "/" + Utils.DATABASE_NAME, stage);
+				exporter.exportAsJSON(file);
+				Platform.runLater(this::closeWaitingDialog);
+			});
 			exportThread.start();
 		}
 	}
@@ -691,14 +645,7 @@ public class Controller
 		waitingStage.initOwner(stage);
 		waitingStage.setResizable(false);
 		waitingStage.initModality(Modality.APPLICATION_MODAL);
-		waitingStage.setOnCloseRequest(new EventHandler<WindowEvent>()
-		{
-			@Override
-			public void handle(WindowEvent event)
-			{
-				event.consume();
-			}
-		});
+		waitingStage.setOnCloseRequest(Event::consume);
 		waitingStage.show();
 	}
 
@@ -715,14 +662,14 @@ public class Controller
 		try
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/EditGUI.fxml"));
-			Parent root = (Parent)fxmlLoader.load();
+			Parent root = fxmlLoader.load();
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(root, 455, 280));
 			newStage.setTitle("Eintrag bearbeiten");
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
-			EditController pfc = (EditController)fxmlLoader.getController();
+			EditController pfc = fxmlLoader.getController();
 			pfc.init(this, newStage, settings, icon, object);
 
 			newStage.setResizable(false);
@@ -805,7 +752,7 @@ public class Controller
 		alert.setTitle("Löschen");
 		alert.setHeaderText("");
 		alert.setContentText("Möchten Sie die gesamte Datenbank wirklich unwiederruflich löschen?");
-		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+		Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(icon);
 
 		Optional<ButtonType> result = alert.showAndWait();
@@ -841,7 +788,7 @@ public class Controller
 	{
 		settings = Utils.loadSettings();
 		if(settings != null)
-		{			
+		{
 			setLabels(settings.getLastProject(), settings.getLastTask());
 			projektExistiertFlag = true;
 			newProject(settings.getLastProject(), settings.getLastTask());
@@ -856,14 +803,14 @@ public class Controller
 			settings.setSavePath(DEFAULT_SAVE_PATH);
 		}
 	}
-	
+
 	@FXML
 	public void createReport()
 	{
 		try
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/ReportGUI.fxml"));
-			Parent root = (Parent)fxmlLoader.load();
+			Parent root = (Parent) fxmlLoader.load();
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(root, 500, 500));
 			newStage.setMinWidth(300);
@@ -872,7 +819,7 @@ public class Controller
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
-			ReportController reportController = (ReportController)fxmlLoader.getController();
+			ReportController reportController = (ReportController) fxmlLoader.getController();
 			reportController.init(this, newStage, settings, icon);
 
 			newStage.setResizable(true);
