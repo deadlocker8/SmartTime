@@ -81,7 +81,6 @@ public class InsertTimeController
 		}
 
 		comboBoxProject.getItems().addAll(objects);
-		comboBoxProject.getSelectionModel().select(settings.getLastProject());
 		comboBoxProject.setStyle("-fx-font-family: \"Arial\";-fx-font-size: 15px;");
 
 		comboBoxTask.setStyle("-fx-font-family: \"Arial\";-fx-font-size: 15px;");
@@ -103,6 +102,9 @@ public class InsertTimeController
 				}
 			}
 		});
+
+		comboBoxProject.getSelectionModel().select(settings.getLastProject());
+		comboBoxTask.getSelectionModel().select(settings.getLastTask());
 
 		timePicker1Controller.setController(this);
 		timePicker2Controller.setController(this);
