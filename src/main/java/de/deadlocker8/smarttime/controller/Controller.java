@@ -811,7 +811,7 @@ public class Controller
 		try
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/ReportGUI.fxml"));
-			Parent root = (Parent) fxmlLoader.load();
+			Parent root = fxmlLoader.load();
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(root, 500, 500));
 			newStage.setMinWidth(300);
@@ -820,7 +820,7 @@ public class Controller
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
-			ReportController reportController = (ReportController) fxmlLoader.getController();
+			ReportController reportController = fxmlLoader.getController();
 			reportController.init(this, newStage, settings, icon);
 
 			newStage.setResizable(true);

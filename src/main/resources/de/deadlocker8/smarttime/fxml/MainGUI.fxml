@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.deadlocker8.smarttime.controller.Controller">
+<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.deadlocker8.smarttime.controller.Controller">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="143.0" layoutY="69.0" prefHeight="800.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -43,7 +43,7 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Report">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#createReport" text="PDF Report erstellen" />
+                        <MenuItem disable="true" mnemonicParsing="false" onAction="#createReport" text="PDF Report erstellen" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="?">
