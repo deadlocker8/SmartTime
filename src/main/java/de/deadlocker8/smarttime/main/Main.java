@@ -44,15 +44,12 @@ public class Main extends Application
 			stage.getIcons().add(new Image("/de/deadlocker8/smarttime/icon.png"));
 			stage.show();
 
-			// fängt die Aufforderung das Fenster zu schließen ab, um vorher
-			// noch eine Prüfung duchzuführen
 			stage.setOnCloseRequest(we -> {
 				if(controller.isTimerRunning())
 				{
 					Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Stoppuhr läuft noch!", stage).show();
 
-					// "schluckt" die Aufforderung das Fenster zu schließen
-					// (Fenster wird dadurch nicht geschlossen)
+					// "schluckt" die Aufforderung das Fenster zu schließen (Fenster wird dadurch nicht geschlossen)
 					we.consume();
 				}
 				else

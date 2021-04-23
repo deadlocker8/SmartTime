@@ -1,10 +1,5 @@
 package de.deadlocker8.smarttime.core;
 
-/**
- * stellt Methoden zur Konvertierung von Einheiten zur Verfügung
- *
- * @author Robert
- */
 public class ConvertTo
 {
 	private ConvertTo()
