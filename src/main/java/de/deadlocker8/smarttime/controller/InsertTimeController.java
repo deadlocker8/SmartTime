@@ -228,6 +228,9 @@ public class InsertTimeController
 	public void useCurrentTime()
 	{
 		LocalDateTime now = LocalDateTime.now();
+		timePicker1Controller.setTime(now.getHour(), now.getMinute() - 1, 0);
+		timePicker1Controller.init();
+
 		timePicker2Controller.setTime(now.getHour(), now.getMinute(), now.getSecond());
 		timePicker2Controller.init();
 		setLabelDuration();
