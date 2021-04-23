@@ -1,22 +1,21 @@
 package de.deadlocker8.smarttime.core;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
+import javafx.application.Platform;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import javafx.application.Platform;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import logger.Logger;
-import tools.AlertGenerator;
 
 public class Importer
 {
@@ -54,15 +53,15 @@ public class Importer
 				sql.insert(o);
 			}
 			
-			Platform.runLater(()->{				
-				AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich importiert", "", "Der Importvorgang wurde erfolgreich abgeschlossen.", icon, stage, null, false);
+			Platform.runLater(()->{
+				Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage);
 			});
 		}
 		catch(Exception e)
 		{			
 			Logger.error(e);
 			Platform.runLater(()->{
-				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage);
 			});
 		}		
 	}	
@@ -79,15 +78,15 @@ public class Importer
 				currentDB.insert(item);
 			}
 			
-			Platform.runLater(()->{				
-				AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich importiert", "", "Der Importvorgang wurde erfolgreich abgeschlossen.", icon, stage, null, false);
+			Platform.runLater(()->{
+				Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage);
 			});
 		}
 		catch(Exception e)
 		{			
 			Logger.error(e);
 			Platform.runLater(()->{
-				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage);
 			});
 		}		
 	}
@@ -130,7 +129,7 @@ public class Importer
 		{			
 			Logger.error(e);
 			Platform.runLater(()->{
-				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Importieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage);
 			});
 		}					
 	}

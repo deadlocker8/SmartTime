@@ -1,13 +1,11 @@
 package de.deadlocker8.smarttime.charts;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-
 import de.deadlocker8.smarttime.core.LogObject;
 import de.deadlocker8.smarttime.core.SQL;
 import de.deadlocker8.smarttime.core.Settings;
 import de.deadlocker8.smarttime.core.Utils;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -20,8 +18,10 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import logger.Logger;
-import tools.AlertGenerator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 
 @SuppressWarnings("rawtypes")
 public class ChartGUIController
@@ -431,7 +431,7 @@ public class ChartGUIController
 	
 	private void showErrorMessage()
 	{
-		AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Erstellen des Diagramms.", icon, stage, null, false);	
+		Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Erstellen des Diagramms.", stage);
 	}
 
 	private void showPieChart(PieChart chart)

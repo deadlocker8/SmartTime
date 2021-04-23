@@ -6,14 +6,16 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.google.gson.Gson;
+import de.thecodelabs.utils.io.PathUtils;
+import de.thecodelabs.utils.util.SystemUtils;
 
-import tools.PathUtils;
 
 public class Utils 
 {   
@@ -38,8 +40,9 @@ public class Utils
 		Settings settings;
 		try
 		{
-			Gson gson = new Gson();			
-			Reader reader = Files.newBufferedReader(Paths.get(PathUtils.getOSindependentPath() + bundle.getString("folder") + "/settings.json"), Charset.forName("UTF-8"));
+			Gson gson = new Gson();
+			Path configDir = SystemUtils.getApplicationSupportDirectoryPath(bundle.getString("folder"));
+			Reader reader = Files.newBufferedReader(configDir.resolve("settings.json"), Charset.forName("UTF-8"));
 			settings = gson.fromJson(reader, Settings.class);	
 			reader.close();
 			return settings;
@@ -54,8 +57,10 @@ public class Utils
 	{		
 		Gson gson = new Gson();
 		String jsonString = gson.toJson(settings);
-		PathUtils.checkFolder(new File(PathUtils.getOSindependentPath() + bundle.getString("folder")));
-		Writer writer = Files.newBufferedWriter(Paths.get(PathUtils.getOSindependentPath() + bundle.getString("folder")  + "/settings.json"), Charset.forName("UTF-8"));
+
+		Path configDir = SystemUtils.getApplicationSupportDirectoryPath(bundle.getString("folder"));
+		PathUtils.createDirectoriesIfNotExists(configDir);
+		Writer writer = Files.newBufferedWriter(configDir.resolve("settings.json"), Charset.forName("UTF-8"));
 		writer.write(jsonString);
 		writer.close();
 	}

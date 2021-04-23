@@ -1,10 +1,15 @@
 package de.deadlocker8.smarttime.main;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import de.deadlocker8.smarttime.controller.Controller;
+import de.thecodelabs.logger.FileOutputOption;
+import de.thecodelabs.logger.LogLevelFilter;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.io.PathUtils;
+import de.thecodelabs.utils.ui.Alerts;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.SystemUtils;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -14,10 +19,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import logger.FileOutputMode;
-import logger.Logger;
-import tools.AlertGenerator;
-import tools.PathUtils;
+
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 
 public class Main extends Application
@@ -26,9 +31,9 @@ public class Main extends Application
 	public void start(Stage stage)
 	{
 		try
-		{			
+		{
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/MainGUI.fxml"));
-			Parent root = (Parent)loader.load();
+			Parent root = (Parent) loader.load();
 
 			Scene scene = new Scene(root, 800, 800);
 			scene.getStylesheets().add("/de/deadlocker8/smarttime/css/application.css");
@@ -37,8 +42,8 @@ public class Main extends Application
 			stage.setResizable(true);
 			stage.setTitle("SmartTime");
 			stage.setScene(scene);
-			
-			Controller controller = (Controller)loader.getController();			
+
+			Controller controller = (Controller) loader.getController();
 			controller.init(stage);
 
 			stage.getIcons().add(new Image("/de/deadlocker8/smarttime/icon.png"));
@@ -52,8 +57,8 @@ public class Main extends Application
 				{
 					if(controller.isTimerRunning())
 					{
-						AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Die Stoppuhr läuft noch!", new Image("/de/deadlocker8/smarttime/icon.png"), stage, null, false);
-						
+						Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Stoppuhr läuft noch!", stage);
+
 						// "schluckt" die Aufforderung das Fenster zu schließen
 						// (Fenster wird dadurch nicht geschlossen)
 						we.consume();
@@ -70,23 +75,35 @@ public class Main extends Application
 			Logger.error(e);
 		}
 	}
-	
+
 	@Override
-	public void init() throws Exception
+	public void init()
 	{
 		ResourceBundle bundle = ResourceBundle.getBundle("de/deadlocker8/smarttime/", Locale.GERMANY);
-		
+
 		Parameters params = getParameters();
-		String logLevelParam = params.getNamed().get("loglevel");		
-		Logger.setLevel(logLevelParam);	
-		
-		File logFolder = new File(PathUtils.getOSindependentPath() + "/Deadlocker/" + bundle.getString("app.name"));			
-		PathUtils.checkFolder(logFolder);
-		Logger.enableFileOutput(logFolder, System.out, System.err, FileOutputMode.COMBINED);
-		
-		Logger.appInfo(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"));		
+		final Optional<String> isDebugOptional = params.getUnnamed().stream()
+				.filter(param -> param.contains("debug"))
+				.findAny();
+
+		final boolean isDebug = isDebugOptional.isPresent();
+
+		Logger.init(SystemUtils.getApplicationSupportDirectoryPath("Deadlocker", bundle.getString("app.name")));
+		if(isDebug)
+		{
+			NVCStage.setDisabledSizeLoading(true);
+			Logger.setLevelFilter(LogLevelFilter.DEBUG);
+			Logger.setFileOutput(FileOutputOption.DISABLED);
+		}
+		else
+		{
+			Logger.setFileOutput(FileOutputOption.COMBINED);
+		}
+		Logger.info("Logging initialized (Running in LogLevel: {0})", Logger.getLevelFilter().toString());
+
+		Logger.appInfo(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"));
 	}
-	
+
 	public static void main(String[] args)
 	{
 		launch(args);

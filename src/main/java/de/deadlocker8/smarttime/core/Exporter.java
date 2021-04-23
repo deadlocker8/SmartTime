@@ -1,20 +1,19 @@
 package de.deadlocker8.smarttime.core;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
+import javafx.application.Platform;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Date;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import javafx.application.Platform;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import logger.Logger;
-import tools.AlertGenerator;
 
 public class Exporter
 {
@@ -59,15 +58,15 @@ public class Exporter
             out.write(allItems.toString());           
             out.close();   
             
-			Platform.runLater(()->{				
-				AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "", "Der Exportvorgang wurde erfolgreich abgeschlossen.", icon, stage, null, false);
+			Platform.runLater(()->{
+				Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "Der Exportvorgang wurde erfolgreich abgeschlossen.", stage);
 			});
 		}
 		catch(Exception e)
 		{			
 			Logger.error(e);
 			Platform.runLater(()->{
-				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", stage);
 			});
 		}		
 	}	

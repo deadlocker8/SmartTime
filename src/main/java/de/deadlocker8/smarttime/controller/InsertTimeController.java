@@ -1,5 +1,21 @@
 package de.deadlocker8.smarttime.controller;
 
+import de.deadlocker8.smarttime.core.*;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,30 +27,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
-import de.deadlocker8.smarttime.core.LogObject;
-import de.deadlocker8.smarttime.core.SQL;
-import de.deadlocker8.smarttime.core.Settings;
-import de.deadlocker8.smarttime.core.Utils;
-import fontAwesome.FontIcon;
-import fontAwesome.FontIconType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.util.Callback;
-import logger.Logger;
-import tools.AlertGenerator;
-import tools.ConvertTo;
 
 public class InsertTimeController 
 {
@@ -62,8 +54,11 @@ public class InsertTimeController
 		this.stage = stage;
 		this.controller = controller;		
 		this.icon = icon;
-		
-		buttonUseCurrentTime.setGraphic(new FontIcon(FontIconType.CLOCK_ALT, 14, Color.BLACK));
+
+		final FontIcon fontIconClock = new FontIcon(FontAwesomeType.CLOCK_ALT);
+		fontIconClock.setSize(14);
+		fontIconClock.setColor(Color.BLACK);
+		buttonUseCurrentTime.setGraphic(fontIconClock);
 		
 		ArrayList<String> objects = new ArrayList<String>();
 		
@@ -210,21 +205,21 @@ public class InsertTimeController
 				catch(Exception e)
 				{	
 					Logger.error(e);
-					AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Speichern des Eintrags.", icon, stage, null, false);									
-				}				
-				
-				AlertGenerator.showAlert(AlertType.INFORMATION, "Gespeichert", "", "Der Eintrag wurde erfolgreich gespeichert.", icon, stage, null, false);				
+					Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Speichern des Eintrags.", stage);
+				}
+
+				Alerts.getInstance().createAlert(AlertType.INFORMATION, "Gespeichert", "Der Eintrag wurde erfolgreich gespeichert.", stage);
 				stage.close();
 				controller.loadAll();				
 			}
 			else
 			{
-				AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Endzeit muss vor Startzeit liegen.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Endzeit muss vor Startzeit liegen.", stage);
 			}
 		}
 		else
 		{
-			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Die Felder für Projekt und Task dürfen nicht leer sein.", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Felder für Projekt und Task dürfen nicht leer sein.", stage);
 		}
 	}
 	
@@ -399,7 +394,7 @@ public class InsertTimeController
 		
 		Duration d= Duration.between(dateTime, dateTime2);
 		
-		labelDuration.setText(ConvertTo.ConvertSecondsToTime(d.getSeconds()));		
+		labelDuration.setText(ConvertTo.ConvertSecondsToTime(d.getSeconds()));
 	}
 	
 	public boolean isEndDateAfterStartDate()

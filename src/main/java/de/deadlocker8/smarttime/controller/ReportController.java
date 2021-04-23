@@ -6,6 +6,8 @@ import java.util.Collections;
 import de.deadlocker8.smarttime.core.SQL;
 import de.deadlocker8.smarttime.core.Settings;
 import de.deadlocker8.smarttime.core.Utils;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
@@ -15,8 +17,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import logger.Logger;
-import tools.AlertGenerator;
 
 public class ReportController
 {
@@ -133,13 +133,13 @@ public class ReportController
 		String project = comboBoxProject.getValue();
 		if(project == null || project.equals(""))
 		{
-			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Bitte wähle ein Projekt aus", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Bitte wähle ein Projekt aus", stage);
 			return;
 		}
 		
 		if(!project.equals(ALL_PROJECTS) && getNumberOfActivatedTasks() == 0)
 		{
-			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Bitte wähle mindestens einen Task aus aus", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Bitte wähle mindestens einen Task aus", stage);
 			return;
 		}
 		

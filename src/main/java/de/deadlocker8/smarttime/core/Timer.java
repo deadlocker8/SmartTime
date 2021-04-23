@@ -5,7 +5,7 @@ import javafx.animation.Timeline;
 import javafx.animation.Animation.Status;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
-import tools.ConvertTo;
+import de.deadlocker8.smarttime.core.ConvertTo;
 
 public class Timer
 {

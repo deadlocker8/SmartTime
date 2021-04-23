@@ -1,11 +1,9 @@
 package de.deadlocker8.smarttime.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import de.deadlocker8.smarttime.core.SQL;
 import de.deadlocker8.smarttime.core.Settings;
 import de.deadlocker8.smarttime.core.Utils;
+import de.thecodelabs.utils.ui.Alerts;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -15,7 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import tools.AlertGenerator;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Controllerklasse für das Projektfenster
@@ -98,7 +98,7 @@ public class ProjectController
 
 		if(project == null || project.equals("") || task == null || task.equals(""))
 		{
-			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Die Felder dürfen nicht leer sein.", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Felder dürfen nicht leer sein.", stage);
 		}
 		else
 		{

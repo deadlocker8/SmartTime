@@ -13,13 +13,11 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import de.deadlocker8.smarttime.charts.ChartGUIController;
-import de.deadlocker8.smarttime.core.Exporter;
-import de.deadlocker8.smarttime.core.Importer;
-import de.deadlocker8.smarttime.core.LogObject;
-import de.deadlocker8.smarttime.core.SQL;
-import de.deadlocker8.smarttime.core.Settings;
-import de.deadlocker8.smarttime.core.Timer;
-import de.deadlocker8.smarttime.core.Utils;
+import de.deadlocker8.smarttime.core.*;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.io.PathUtils;
+import de.thecodelabs.utils.ui.Alerts;
+import de.thecodelabs.utils.util.SystemUtils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -61,10 +59,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import logger.Logger;
-import tools.AlertGenerator;
-import tools.ConvertTo;
-import tools.PathUtils;
+
 
 public class Controller
 {
@@ -91,7 +86,7 @@ public class Controller
 	private long endTimestamp;
 	private int longestProject;
 	private ArrayList<LogObject> logObjects = new ArrayList<LogObject>();
-	private final String DEFAULT_SAVE_PATH = PathUtils.getOSindependentPath() + "/Deadlocker/SmartTime/";
+	private final String DEFAULT_SAVE_PATH = SystemUtils.getApplicationSupportDirectoryPath("Deadlocker", "SmartTime").toString();
 	private SQL sql;
 	private Stage waitingStage = new Stage();
 	private Image icon;
@@ -103,7 +98,7 @@ public class Controller
 		this.stage = stage;
 
 		labelSeparator.setStyle("-fx-background-color: #cdc6c6; -fx-font-size: 0.7");
-		PathUtils.checkFolder(new File(DEFAULT_SAVE_PATH));
+		PathUtils.createDirectoriesIfNotExists(new File(DEFAULT_SAVE_PATH).toPath());
 		icon = new Image("/de/deadlocker8/smarttime/icon.png");
 		accordion.setExpandedPane(gesamtesLog);
 		projektExistiertFlag = false;
@@ -136,7 +131,7 @@ public class Controller
 			}
 			else
 			{
-				AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Kein Projekt ausgewählt.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Kein Projekt ausgewählt.", stage);
 				startButton.setSelected(false);
 			}
 		});
@@ -151,7 +146,7 @@ public class Controller
 		// Prüft, ob die Stoppuhr noch läuft
 		if(isTimerRunning())
 		{
-			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "", "Stoppuhr läuft noch!", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Stoppuhr läuft noch!", stage);
 		}
 		else
 		{
@@ -207,7 +202,7 @@ public class Controller
 		}
 		else
 		{
-			AlertGenerator.showAlert(AlertType.WARNING, "Warnung", "Stoppuhr läuft noch!", "Projekt und Task können nur geändert werden,\nwenn die Stoppuhr nicht läuft.", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Stoppuhr läuft noch!", "Projekt und Task können nur geändert werden,\nwenn die Stoppuhr nicht läuft.", stage);
 		}
 	}
 
@@ -278,7 +273,7 @@ public class Controller
 		catch(Exception e)
 		{
 			Logger.error(e);
-			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Laden der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Laden der Daten ist ein Fehler aufgetreten.", stage);
 		}
 	}
 
@@ -310,7 +305,7 @@ public class Controller
 			catch(Exception ex)
 			{
 				Logger.error(ex);
-				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Erstellen der Datenbank.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Erstellen der Datenbank.", stage);
 			}
 		}
 	}
@@ -499,7 +494,7 @@ public class Controller
 		catch(Exception e)
 		{
 			Logger.error(e);
-			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Fehler beim Speichern des Eintrags.", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Speichern des Eintrags.", stage);
 		}
 
 		loadAll();
@@ -642,9 +637,10 @@ public class Controller
 			catch(IOException e)
 			{
 				Logger.error(e);
-				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", stage);
 			}
-			AlertGenerator.showAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "", "Export erfolgreich abgeschlossen.", icon, stage, null, false);
+
+			Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "Export erfolgreich abgeschlossen.", stage);
 		}
 	}
 
@@ -749,7 +745,7 @@ public class Controller
 		catch(Exception e)
 		{
 			Logger.error(e);
-			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Aktualisieren des Eintrags ist ein Fehler aufgetreten.", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Aktualisieren des Eintrags ist ein Fehler aufgetreten.", stage);
 		}
 	}
 
@@ -763,7 +759,7 @@ public class Controller
 		catch(Exception e)
 		{
 			Logger.error(e);
-			AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Löschen des Eintrags ist ein Fehler aufgetreten.", icon, stage, null, false);
+			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Löschen des Eintrags ist ein Fehler aufgetreten.", stage);
 		}
 	}
 
@@ -789,7 +785,7 @@ public class Controller
 					catch(IOException e)
 					{
 						Logger.error(e);
-						AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Verschieben der Datenbank ist ein Fehler aufgetreten", icon, stage, null, false);
+						Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Verschieben der Datenbank ist ein Fehler aufgetreten.", stage);
 					}
 				}
 				else
@@ -824,7 +820,7 @@ public class Controller
 			catch(Exception e)
 			{
 				Logger.error(e);
-				AlertGenerator.showAlert(AlertType.ERROR, "Fehler", "", "Beim Löschen der Datenbank ist ein Fehler aufgetreten.", icon, stage, null, false);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Löschen der Datenbank ist ein Fehler aufgetreten.", stage);
 			}
 		}
 	}
@@ -893,6 +889,8 @@ public class Controller
 	{
 		ArrayList<String> creditLines = new ArrayList<>();
 		creditLines.add(bundle.getString("credits"));
-		AlertGenerator.showAboutAlertWithCredits(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", creditLines, icon, stage, null, false);
+
+		// TODO
+//		AlertGenerator.showAboutAlertWithCredits(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), "Robert Goldmann", creditLines, icon, stage, null, false);
 	}
 }

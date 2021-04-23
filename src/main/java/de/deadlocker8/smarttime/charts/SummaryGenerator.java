@@ -10,7 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import tools.ConvertTo;
+import de.deadlocker8.smarttime.core.ConvertTo;
 
 public class SummaryGenerator
 {

@@ -13,7 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import tools.ConvertTo;
+import de.deadlocker8.smarttime.core.ConvertTo;
 
 public class PieChartGenerator
 {

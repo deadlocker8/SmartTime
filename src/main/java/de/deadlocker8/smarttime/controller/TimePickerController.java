@@ -1,8 +1,7 @@
 package de.deadlocker8.smarttime.controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,8 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import fontAwesome.FontIcon;
-import fontAwesome.FontIconType;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class TimePickerController implements Initializable
 {
@@ -93,11 +93,11 @@ public class TimePickerController implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		FontIcon arrowUp = new FontIcon(FontIconType.ARROW_UP);
+		FontIcon arrowUp = new FontIcon(FontAwesomeType.ARROW_UP);
 		arrowUp.setSize(10);
 		arrowUp.setColor(Color.web("#000000"));
 		
-		FontIcon arrowDown = new FontIcon(FontIconType.ARROW_DOWN);
+		FontIcon arrowDown = new FontIcon(FontAwesomeType.ARROW_DOWN);
 		arrowDown.setSize(10);
 		arrowDown.setColor(Color.web("#000000"));
 		
@@ -133,11 +133,11 @@ public class TimePickerController implements Initializable
 		
 	//VBoxMinutes
 		
-		arrowUp = new FontIcon(FontIconType.ARROW_UP);
+		arrowUp = new FontIcon(FontAwesomeType.ARROW_UP);
 		arrowUp.setSize(10);
 		arrowUp.setColor(Color.web("#000000"));
 		
-		arrowDown = new FontIcon(FontIconType.ARROW_DOWN);
+		arrowDown = new FontIcon(FontAwesomeType.ARROW_DOWN);
 		arrowDown.setSize(10);
 		arrowDown.setColor(Color.web("#000000"));
 		
@@ -171,11 +171,11 @@ public class TimePickerController implements Initializable
 		vboxMinutes.setAlignment(Pos.CENTER);
 		
 	//VBoxSeconds
-		arrowUp = new FontIcon(FontIconType.ARROW_UP);
+		arrowUp = new FontIcon(FontAwesomeType.ARROW_UP);
 		arrowUp.setSize(10);
 		arrowUp.setColor(Color.web("#000000"));
 		
-		arrowDown = new FontIcon(FontIconType.ARROW_DOWN);
+		arrowDown = new FontIcon(FontAwesomeType.ARROW_DOWN);
 		arrowDown.setSize(10);
 		arrowDown.setColor(Color.web("#000000"));
 		

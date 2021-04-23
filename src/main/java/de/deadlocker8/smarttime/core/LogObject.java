@@ -3,7 +3,7 @@ package de.deadlocker8.smarttime.core;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import tools.ConvertTo;
+import de.deadlocker8.smarttime.core.ConvertTo;
 
 /**
  * Klasse "Logobject" - generiert Objekte, die alle wichtigen Eigenschaften für das Logfile enthalten
