@@ -83,8 +83,11 @@ public class InsertTimeController
 		}
 
 		comboBoxProject.getItems().addAll(objects);
+		comboBoxProject.getSelectionModel().select(settings.getLastProject());
 		comboBoxProject.setStyle("-fx-font-family: \"Arial\";-fx-font-size: 15px;");
+
 		comboBoxTask.setStyle("-fx-font-family: \"Arial\";-fx-font-size: 15px;");
+		comboBoxTask.getSelectionModel().select(settings.getLastTask());
 
 		comboBoxProject.valueProperty().addListener((observable, oldValue, newValue) -> {
 			comboBoxTask.getItems().clear();
