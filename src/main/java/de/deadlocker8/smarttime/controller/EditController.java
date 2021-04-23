@@ -84,7 +84,7 @@ public class EditController
 
 		if(project == null || project.equals("") || task == null || task.equals(""))
 		{
-			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Felder dürfen nicht leer sein.", stage);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Felder dürfen nicht leer sein.", stage).show();
 		}
 		else
 		{

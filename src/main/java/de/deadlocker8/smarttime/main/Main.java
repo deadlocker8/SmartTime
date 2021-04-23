@@ -49,7 +49,7 @@ public class Main extends Application
 			stage.setOnCloseRequest(we -> {
 				if(controller.isTimerRunning())
 				{
-					Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Stoppuhr läuft noch!", stage);
+					Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Stoppuhr läuft noch!", stage).show();
 
 					// "schluckt" die Aufforderung das Fenster zu schließen
 					// (Fenster wird dadurch nicht geschlossen)

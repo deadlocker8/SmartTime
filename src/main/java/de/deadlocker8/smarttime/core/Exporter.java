@@ -55,12 +55,12 @@ public class Exporter
 			out.write(allItems.toString());
 			out.close();
 
-			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "Der Exportvorgang wurde erfolgreich abgeschlossen.", stage));
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "Der Exportvorgang wurde erfolgreich abgeschlossen.", stage).show());
 		}
 		catch(Exception e)
 		{
 			Logger.error(e);
-			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", stage));
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", stage).show());
 		}
 	}
 }

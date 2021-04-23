@@ -50,12 +50,12 @@ public class Importer
 				sql.insert(o);
 			}
 
-			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage));
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage).show());
 		}
 		catch(Exception e)
 		{
 			Logger.error(e);
-			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage));
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage).show());
 		}
 	}
 
@@ -71,12 +71,12 @@ public class Importer
 				currentDB.insert(item);
 			}
 
-			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage));
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich importiert", "Der Importvorgang wurde erfolgreich abgeschlossen.", stage).show());
 		}
 		catch(Exception e)
 		{
 			Logger.error(e);
-			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage));
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage).show());
 		}
 	}
 
@@ -117,7 +117,7 @@ public class Importer
 		catch(Exception e)
 		{
 			Logger.error(e);
-			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage));
+			Platform.runLater(() -> Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Importieren der Daten ist ein Fehler aufgetreten.", stage).show());
 		}
 	}
 

@@ -127,13 +127,13 @@ public class ReportController
 		String project = comboBoxProject.getValue();
 		if(project == null || project.equals(""))
 		{
-			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Bitte wähle ein Projekt aus", stage);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Bitte wähle ein Projekt aus", stage).show();
 			return;
 		}
 
 		if(!project.equals(ALL_PROJECTS) && getNumberOfActivatedTasks() == 0)
 		{
-			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Bitte wähle mindestens einen Task aus", stage);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Bitte wähle mindestens einen Task aus", stage).show();
 			return;
 		}
 

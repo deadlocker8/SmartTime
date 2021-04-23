@@ -412,7 +412,7 @@ public class ChartGUIController
 
 	private void showErrorMessage()
 	{
-		Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Erstellen des Diagramms.", stage);
+		Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Erstellen des Diagramms.", stage).show();
 	}
 
 	private void showPieChart(PieChart chart)

@@ -56,14 +56,12 @@ public class InsertTimeController
 	private Stage stage;
 	private Controller controller;
 	private String savePath;
-	private Image icon;
 
-	public void init(Stage stage, Controller controller, Settings settings, Image icon)
+	public void init(Stage stage, Controller controller, Settings settings)
 	{
 		this.savePath = settings.getSavePath() + "/" + Utils.DATABASE_NAME;
 		this.stage = stage;
 		this.controller = controller;
-		this.icon = icon;
 
 		final FontIcon fontIconClock = new FontIcon(FontAwesomeType.CLOCK_ALT);
 		fontIconClock.setSize(14);
@@ -203,21 +201,21 @@ public class InsertTimeController
 				catch(Exception e)
 				{
 					Logger.error(e);
-					Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Speichern des Eintrags.", stage);
+					Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Speichern des Eintrags.", stage).show();
 				}
 
-				Alerts.getInstance().createAlert(AlertType.INFORMATION, "Gespeichert", "Der Eintrag wurde erfolgreich gespeichert.", stage);
+				Alerts.getInstance().createAlert(AlertType.INFORMATION, "Gespeichert", "Der Eintrag wurde erfolgreich gespeichert.", stage).show();
 				stage.close();
 				controller.loadAll();
 			}
 			else
 			{
-				Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Endzeit muss vor Startzeit liegen.", stage);
+				Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Startzeit muss vor Endzeit liegen.", stage).show();
 			}
 		}
 		else
 		{
-			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Felder für Projekt und Task dürfen nicht leer sein.", stage);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Die Felder für Projekt und Task dürfen nicht leer sein.", stage).show();
 		}
 	}
 

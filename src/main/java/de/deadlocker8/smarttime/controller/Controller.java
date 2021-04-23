@@ -124,7 +124,7 @@ public class Controller
 			}
 			else
 			{
-				Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Kein Projekt ausgewählt.", stage);
+				Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Kein Projekt ausgewählt.", stage).show();
 				startButton.setSelected(false);
 			}
 		});
@@ -139,7 +139,7 @@ public class Controller
 		// Prüft, ob die Stoppuhr noch läuft
 		if(isTimerRunning())
 		{
-			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Stoppuhr läuft noch!", stage);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Stoppuhr läuft noch!", stage).show();
 		}
 		else
 		{
@@ -195,7 +195,7 @@ public class Controller
 		}
 		else
 		{
-			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Stoppuhr läuft noch!", "Projekt und Task können nur geändert werden,\nwenn die Stoppuhr nicht läuft.", stage);
+			Alerts.getInstance().createAlert(AlertType.WARNING, "Warnung", "Stoppuhr läuft noch!", "Projekt und Task können nur geändert werden,\nwenn die Stoppuhr nicht läuft.", stage).show();
 		}
 	}
 
@@ -266,7 +266,7 @@ public class Controller
 		catch(Exception e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Laden der Daten ist ein Fehler aufgetreten.", stage);
+			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Laden der Daten ist ein Fehler aufgetreten.", stage).show();
 		}
 	}
 
@@ -298,7 +298,7 @@ public class Controller
 			catch(Exception ex)
 			{
 				Logger.error(ex);
-				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Erstellen der Datenbank.", stage);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Erstellen der Datenbank.", stage).show();
 			}
 		}
 	}
@@ -472,7 +472,7 @@ public class Controller
 		catch(Exception e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Speichern des Eintrags.", stage);
+			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Fehler beim Speichern des Eintrags.", stage).show();
 		}
 
 		loadAll();
@@ -501,7 +501,7 @@ public class Controller
 			newStage.setTitle("Zeit nachträglich einfügen");
 
 			InsertTimeController controller = fxmlLoader.getController();
-			controller.init(newStage, this, settings, icon);
+			controller.init(newStage, this, settings);
 			newStage.getIcons().add(icon);
 			newStage.initOwner(stage);
 
@@ -599,10 +599,10 @@ public class Controller
 			catch(IOException e)
 			{
 				Logger.error(e);
-				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", stage);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Exportieren der Daten ist ein Fehler aufgetreten.", stage).show();
 			}
 
-			Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "Export erfolgreich abgeschlossen.", stage);
+			Alerts.getInstance().createAlert(AlertType.INFORMATION, "Erfolgreich exportiert", "Export erfolgreich abgeschlossen.", stage).show();
 		}
 	}
 
@@ -692,7 +692,7 @@ public class Controller
 		catch(Exception e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Aktualisieren des Eintrags ist ein Fehler aufgetreten.", stage);
+			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Aktualisieren des Eintrags ist ein Fehler aufgetreten.", stage).show();
 		}
 	}
 
@@ -706,7 +706,7 @@ public class Controller
 		catch(Exception e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Löschen des Eintrags ist ein Fehler aufgetreten.", stage);
+			Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Löschen des Eintrags ist ein Fehler aufgetreten.", stage).show();
 		}
 	}
 
@@ -732,7 +732,7 @@ public class Controller
 					catch(IOException e)
 					{
 						Logger.error(e);
-						Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Verschieben der Datenbank ist ein Fehler aufgetreten.", stage);
+						Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Verschieben der Datenbank ist ein Fehler aufgetreten.", stage).show();
 					}
 				}
 				else
@@ -767,7 +767,7 @@ public class Controller
 			catch(Exception e)
 			{
 				Logger.error(e);
-				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Löschen der Datenbank ist ein Fehler aufgetreten.", stage);
+				Alerts.getInstance().createAlert(AlertType.ERROR, "Fehler", "Beim Löschen der Datenbank ist ein Fehler aufgetreten.", stage).show();
 			}
 		}
 	}
