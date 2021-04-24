@@ -1,7 +1,7 @@
 # SmartTime
 
 - startdate: 09.01.15
-- current version: 5.1.2 (32) - 05.06.17
+- current version: 5.2.2 (35) - 24.04.21
 
 ### Description
 
