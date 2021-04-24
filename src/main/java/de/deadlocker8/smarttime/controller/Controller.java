@@ -413,12 +413,13 @@ public class Controller
 		try
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/ChartGUI.fxml"));
-			Parent root = (Parent) fxmlLoader.load();
+			Parent root = fxmlLoader.load();
 			Scene scene = new Scene(root, 800, 600);
 			scene.getStylesheets().add("/de/deadlocker8/smarttime/css/Chart.css");
 			Stage newStage = new Stage();
 			newStage.setScene(scene);
 			newStage.setTitle("Diagramme");
+
 			ChartGUIController controller = fxmlLoader.getController();
 			controller.init(settings, newStage);
 			newStage.getIcons().add(icon);
