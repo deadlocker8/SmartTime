@@ -663,7 +663,7 @@ public class Controller
 	{
 		try
 		{
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/deadlocker8/smarttime/fxml/EditGUI.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("de/deadlocker8/smarttime/fxml/EditGUI.fxml"));
 			Parent root = fxmlLoader.load();
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(root, 455, 280));

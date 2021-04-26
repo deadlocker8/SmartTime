@@ -5,8 +5,6 @@ import de.deadlocker8.smarttime.core.SQL;
 import de.deadlocker8.smarttime.core.Settings;
 import de.deadlocker8.smarttime.core.Utils;
 import de.thecodelabs.utils.ui.Alerts;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
