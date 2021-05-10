@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -22,6 +21,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -231,7 +231,9 @@ public class InsertTimeController
 	public void useCurrentTime()
 	{
 		LocalDateTime now = LocalDateTime.now();
-		timePicker1Controller.setTime(now.getHour(), now.getMinute() - 1, 0);
+
+		LocalDateTime startTime = now.minus(1, ChronoUnit.MINUTES);
+		timePicker1Controller.setTime(startTime.getHour(), startTime.getMinute(),0);
 		timePicker1Controller.init();
 
 		timePicker2Controller.setTime(now.getHour(), now.getMinute(), now.getSecond());
